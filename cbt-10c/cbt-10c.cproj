@@ -133,7 +133,10 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="interrupts.s">
+    <Compile Include="functions.S">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="interrupts.S">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
