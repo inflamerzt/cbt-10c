@@ -5,18 +5,10 @@
  * Author : inflamer
  */ 
 
-#define F_CPU 8000000
-
-#include <avr/io.h>
-#include <avr/cpufunc.h>
-#include <avr/power.h>
-#include <avr/sleep.h>
-#include <util/delay.h>
-#include <avr/interrupt.h>
-#include <util/atomic.h>
-#include <time.h>
 
 #include "main.h"
+
+
 
 //#include "interrupts.s"
 
@@ -29,6 +21,8 @@ ISR(INT0_vect)
 }
 
 
+uint8_t my_value;
+
 
 uint8_t my_C_function(uint8_t var){
 	var += 20;
@@ -38,13 +32,23 @@ uint8_t my_C_function(uint8_t var){
 	return var;
 }  
 
-unsigned char my_value;
+uint8_t my_value;
 
 int main()
 {
 	init();
+	volatile uint8_t test;
 	
-	my_value = 0x55;
+	//my_value = sizeof(MINI_CIFRA_SP);
+	test = pgm_read_byte(&MINI_CIFRA_SP[0]);
+	
+	for (uint8_t i=0;i<sizeof(MINI_CIFRA_SP);i++)
+	{
+		my_value = pgm_read_byte(&MINI_CIFRA_SP[i]);
+		PORTB = my_value;
+	}
+	
+	PORTB = test;
 	DDRB = 0xff;
 	asmfunc_calledfrom_c(3);
 	ATOMIC_BLOCK(ATOMIC_FORCEON){

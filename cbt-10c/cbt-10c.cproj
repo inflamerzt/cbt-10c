@@ -133,6 +133,9 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="data.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="functions.S">
       <SubType>compile</SubType>
     </Compile>

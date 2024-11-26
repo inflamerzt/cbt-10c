@@ -1,4 +1,11 @@
-// raw.s
+
+/*
+ * functions.S
+ *
+ * Created: 26.11.2024 1:36:16
+ *  Author: inflamer
+ */ 
+
 #define __SFR_OFFSET 0          // Use 0 for the I/O register offset
 #include <avr/io.h>             // Defines I/O port aliases
       
