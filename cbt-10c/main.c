@@ -34,8 +34,9 @@ uint8_t my_C_function(uint8_t var){
 
 uint8_t my_value;
 
-int main()
+void main()
 {
+	SP = RAMEND;
 	init();
 	volatile uint8_t test;
 	
@@ -52,16 +53,31 @@ int main()
 	DDRB = 0xff;
 	asmfunc_calledfrom_c(3);
 	ATOMIC_BLOCK(ATOMIC_FORCEON){
-		
+		uint8_t test = 0;
 	}
 	
+	_NOP();
 	while(1);
-	return 0;
+	//return 0;
+	
 }
 
 void init(void){
+
 		PRR = (1<<PRTWI)|(1<<PRUSART0);
 		SMCR = (1<<SE);//|(2<<SM0); //; idle sm=000
 		DDRD = (1<<P_LCD_RES)|(1<<P_bDiode)|(1<<P_bCap)|(1<<P_bTrans)|(1<<PD6);
+		
+		//;=SPI init
+		DDR_SPI = (1<<P_SS)|(1<<P_SCK)|(1<<P_MOSI);
+		DDR_SPI &= ~(1<<P_MISO);
+		
+		DDR_SPI |= (1<<4);
+
+		Vmeas_DDR |= (1<<P_Vmeas);
+
+		Vmeas_port |= P_Vmeas;
+
+
 	
 }
