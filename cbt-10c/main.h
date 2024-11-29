@@ -14,6 +14,7 @@
 
 
 #include "data.h"
+#include "cinterrupts.h"
 
 /*
 #define DDR_booster DDRD
@@ -122,5 +123,16 @@
 
 
 void init(void);
+
+
+PROGMEM volatile const uint8_t LCD_init[] = {
+5,0, LC_nallon_dis,LC_pwron,LC_fillall_dis,LC_nor_dis, LC_nrev_dis, 
+0xFF//; padding byte
+};
+
+PROGMEM volatile const uint8_t LCD_clr[] = {
+96,9, 
+0x00, 192, 0x00, 192, 0x00, 192, 0x00, 192, 0x00, 192
+};
 
 #endif /* MAIN_H_ */

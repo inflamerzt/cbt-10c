@@ -36,7 +36,7 @@ uint8_t my_value;
 
 int main()
 {
-	SP = RAMEND;
+	//SP = RAMEND;
 	init();
 	volatile uint8_t test;
 	
@@ -86,6 +86,8 @@ void init(void){
 		Vmeas_DDR |= (1<<P_Vmeas);
 
 		Vmeas_port |= P_Vmeas;
+		
+		
 
 
 	
