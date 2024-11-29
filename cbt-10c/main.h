@@ -8,13 +8,15 @@
 #include <avr/power.h>
 #include <avr/sleep.h>
 #include <util/delay.h>
-#include <avr/interrupt.h>
+//#include <avr/interrupt.h>
 #include <util/atomic.h>
 #include <time.h>
 
 
+
 #include "data.h"
 #include "cinterrupts.h"
+#include "asm_def.h"
 
 /*
 #define DDR_booster DDRD
@@ -119,6 +121,11 @@
 #define P_LCD_RES PD7
 
 #define P_boostFB PC5
+
+//#define TXCount r16;(TXCount)
+
+
+
 
 const uint8_t SPI_ENABLE = (1<<MSTR)|(1<<SPE);
 

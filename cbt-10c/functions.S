@@ -6,10 +6,11 @@
  *  Author: inflamer
  */ 
 
- //.include "asm_defs."
+ #include "asm_def.h"
+ //#include "main.h"
 
 
- .global SPI_start    ; Makes asmfunc_calledfrom_c visible in other source files
+//.global SPI_start    ; Makes asmfunc_calledfrom_c visible in other source files
 
 .extern my_value
 .extern my_C_function
@@ -17,11 +18,11 @@
 .section .text                  ; Defines a code section
  ;==========================================================================
 	; Pepare SPI data
+.global SPI_start
 	SPI_start:
-
-/*		lpm TXCount,Z+
+		lpm TXCount, Z+
 		lpm TXRowCount,Z+
-	SPI_start_defined: ; if TXCount,TXRowCount preloaded possible reduce size
+/*	SPI_start_defined: ; if TXCount,TXRowCount preloaded possible reduce size
 		clr TXZCount
 		lpm arg,Z+
 
@@ -115,10 +116,9 @@
 		sbrs tmpreg,SPIF
 		rjmp wait_TX_complete
 		cp TXCount, zeroreg
-		brne SPI_TX
+		brne SPI_TX */
 		ret
-
-
+/*
 ;=================
 	LCD_goto_XY:
 		;.def TXXpos = r10

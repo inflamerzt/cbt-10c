@@ -133,6 +133,9 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="asm_def.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="cinterrupts.c">
       <SubType>compile</SubType>
     </Compile>

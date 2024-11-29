@@ -5,4 +5,9 @@
  *  Author: sheiko
  */ 
 
+#include "cinterrupts.h"
 
+ISR(INT0_vect)
+{
+	PORTB = 42;
+};

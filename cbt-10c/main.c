@@ -7,6 +7,7 @@
 
 
 #include "main.h"
+#include "avr\common.h"
 
 
 
@@ -15,10 +16,7 @@
 extern void asmfunc_calledfrom_c(uint8_t val);
 
 
-ISR(INT0_vect)
-{
-	    PORTB = 42;
-}
+
 
 
 uint8_t my_value;
@@ -36,9 +34,32 @@ uint8_t my_value;
 
 int main()
 {
-	//SP = RAMEND;
-	init();
+	
+	SP = RAMEND;
+	
+	const volatile uint8_t *addr = &MINI_CIFRA_SP[0];
+	volatile uint8_t res;
+	
+	asm volatile(
+	"ldi ZL,lo8(%[addr])\n\t"
+	"ldi ZH,hi8(%[addr])\n\t"
+	//"lpm %0,Z+"
+	://"=r" (res)
+	:[addr] "i" (addr));
 
+
+    uint16_t addr16 = (uint16_t)(&MINI_CIFRA_SP[0]);
+    volatile uint8_t result;
+    asm volatile
+    (
+    "lpm %0, Z" "\n\t"  
+    : "=r" (result)
+    : "z" (addr16)
+    );	
+	
+
+	init();
+	result = 0;
 	while(1);
 	//return 0;
 	// never run section for tests only
