@@ -9,6 +9,12 @@
  #include "asm_def.h"
  //#include "main.h"
 
+#define DDR_SPI DDRB
+#define P_SS PB2
+#define P_MOSI PB3
+#define P_MISO PB4
+#define P_SCK PB5
+
 
 //.global SPI_start    ; Makes asmfunc_calledfrom_c visible in other source files
 
@@ -22,7 +28,7 @@
 	SPI_start:
 		lpm TXCount, Z+
 		lpm TXRowCount,Z+
-/*	SPI_start_defined: ; if TXCount,TXRowCount preloaded possible reduce size
+	SPI_start_defined: ; if TXCount,TXRowCount preloaded possible reduce size
 		clr TXZCount
 		lpm arg,Z+
 
@@ -45,7 +51,7 @@
 		rcall SPI_TX
 		inc TXYpos
 		rcall LCD_goto_XY
-		sbi PORTB,P_MOSI
+		sbi _SFR_IO_ADDR(PORTB),1//P_MOSI
 		lds TXCount, TXCountMem
 		
 		
@@ -69,24 +75,24 @@
 
 		
 	SPI_TX:
-		out SPCR, zeroreg		;disable hardware SPI
+		out _SFR_IO_ADDR(SPCR), zeroreg		;disable hardware SPI
 		cli
-		sbi PORTB, P_SCK		;pull up SCK to send D/C SPI signal
-		out SPCR, spenreg		;enable hardware SPI
+		sbi _SFR_IO_ADDR(PORTB), P_SCK		;pull up SCK to send D/C SPI signal
+		out _SFR_IO_ADDR(SPCR), spenreg		;enable hardware SPI
 	
-		sbis PORTB,P_MOSI
+		sbis _SFR_IO_ADDR(PORTB),P_MOSI
 		rjmp no_inv
 		bst controlreg,inv_dis
 		brtc no_inv
 		mov tmpreg,arg
 		com tmpreg 
-		out SPDR,tmpreg ;starting transfer
+		out _SFR_IO_ADDR(SPDR),tmpreg ;starting transfer
 		rjmp inv_end			
 
 		no_inv:
-		out SPDR,arg			;starting transfer
+		out _SFR_IO_ADDR(SPDR),arg			;starting transfer
 		inv_end:
-		cbi PORTB, P_SCK		;release SCK, after start to reduce cpu cycles
+		cbi _SFR_IO_ADDR(PORTB), P_SCK		;release SCK, after start to reduce cpu cycles
 		sei
 		;prepare new data before byte transmit complete
 		dec TXCount
@@ -112,13 +118,13 @@
 		transmit:
 
 	wait_TX_complete:
-		in tmpreg, SPSR
+		in tmpreg, _SFR_IO_ADDR(SPSR)
 		sbrs tmpreg,SPIF
 		rjmp wait_TX_complete
 		cp TXCount, zeroreg
-		brne SPI_TX */
+		brne SPI_TX 
 		ret
-/*
+
 ;=================
 	LCD_goto_XY:
 		;.def TXXpos = r10
@@ -130,7 +136,7 @@
 		push arg
 		push TXRowCount
 		clr TXRowCount
-		cbi PORTB,P_MOSI
+		cbi _SFR_IO_ADDR(PORTB),P_MOSI
 		mov arg, TXXpos
 		andi arg, 0x0F
 		inc TXCount
@@ -152,4 +158,3 @@
 		pop arg
 		ret
 
-		*/
