@@ -120,7 +120,9 @@
 
 #define P_boostFB PC5
 
+const uint8_t SPI_ENABLE = (1<<MSTR)|(1<<SPE);
 
+//register uint8_t testreg;
 
 void init(void);
 
