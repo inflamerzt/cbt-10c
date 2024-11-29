@@ -7,7 +7,7 @@
 
 
 #include "main.h"
-
+#include <avr/sleep.h>
 
 
 //#include "interrupts.s"
@@ -34,7 +34,7 @@ uint8_t my_C_function(uint8_t var){
 
 uint8_t my_value;
 
-void main()
+int main()
 {
 	SP = RAMEND;
 	init();
@@ -53,12 +53,21 @@ void main()
 	DDRB = 0xff;
 	asmfunc_calledfrom_c(3);
 	ATOMIC_BLOCK(ATOMIC_FORCEON){
-		uint8_t test = 0;
+		uint8_t test_atomic = 0;
 	}
 	
 	_NOP();
 	while(1);
 	//return 0;
+	// never run section
+	set_sleep_mode(SLEEP_MODE_IDLE);
+	        
+	sleep_enable();
+	sei();
+	sleep_cpu();
+	sleep_disable();
+	
+	
 	
 }
 
