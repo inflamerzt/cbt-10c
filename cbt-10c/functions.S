@@ -73,8 +73,15 @@
 		rjmp SPI_rstart
 
 
-		
+
 	SPI_TX:
+		// section to set spenreg problem with asm to c convertion
+		push r16
+		ldi r16,(1<<MSTR)|(1<<SPE)
+		mov spenreg, tmpreg
+		pop r16
+		//========================================
+
 		out _SFR_IO_ADDR(SPCR), zeroreg		;disable hardware SPI
 		cli
 		sbi _SFR_IO_ADDR(PORTB), P_SCK		;pull up SCK to send D/C SPI signal

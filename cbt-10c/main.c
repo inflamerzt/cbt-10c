@@ -15,8 +15,10 @@
 
 extern void asmfunc_calledfrom_c(uint8_t val);
 
+extern void SPI_start(void);
 
-
+uint8_t TXCountMem;
+uint8_t TXRowCountMem;
 
 
 uint8_t my_value;
@@ -37,7 +39,10 @@ int main()
 	
 	SP = RAMEND;
 	
-	const volatile uint8_t *addr = &MINI_CIFRA_SP[0];
+	
+	init();
+	
+	const volatile uint8_t *addr = &MINI_CIFRA_0[0];
 	volatile uint8_t res;
 	
 	asm volatile(
@@ -45,7 +50,11 @@ int main()
 	"ldi ZH,hi8(%[addr])\n\t"
 	//"lpm %0,Z+"
 	://"=r" (res)
-	:[addr] "i" (addr));
+	:[addr] "i" (&MINI_CIFRA_0[0]));
+	//:[addr] "i" (addr));
+	
+	set_Z_pointer(&MINI_CIFRA_0[0]);
+	SPI_start();
 
 
     uint16_t addr16 = (uint16_t)(&MINI_CIFRA_SP[0]);
@@ -58,7 +67,6 @@ int main()
     );	
 	
 
-	init();
 	result = 0;
 	while(1);
 	//return 0;
@@ -166,11 +174,11 @@ Do something usefull when LCD reset pulled low and sleep
 		SPCR |= SPI_ENABLE;
 		SPSR |= (1<<SPI2X);
 
-		sleep_cpu();
+		//sleep_cpu();
 		
 		PORTD |= (1<<P_LCD_RES);
 		
-		sleep_cpu();
+		//sleep_cpu();
 		
 		TCCR0B = 0;
 		TIMSK0 = 0;

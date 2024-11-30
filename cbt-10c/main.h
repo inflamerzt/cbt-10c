@@ -125,6 +125,19 @@
 //#define TXCount r16;(TXCount)
 
 
+#define set_Z_pointer(zaddr) \
+(__extension__({                \
+    uint16_t __addr16 = (uint16_t)(zaddr); \
+	__asm__ __volatile__			\
+	(								\
+		"ldi ZL,lo8(%[addr])\n\t"	\
+		"ldi ZH,hi8(%[addr])\n\t"	\
+		:       \
+		:[addr] "i" (__addr16)				\
+	);								\
+}))
+
+
 
 
 const uint8_t SPI_ENABLE = (1<<MSTR)|(1<<SPE);
@@ -132,6 +145,9 @@ const uint8_t SPI_ENABLE = (1<<MSTR)|(1<<SPE);
 //register uint8_t testreg;
 
 void init(void);
+
+
+
 
 
 PROGMEM volatile const uint8_t LCD_init[] = {
