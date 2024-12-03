@@ -89,6 +89,10 @@
 #define button2 PC2
 #define button3 PC3
 
+#define tx_data 1
+#define tx_cmd 0
+
+
 
 
 /*

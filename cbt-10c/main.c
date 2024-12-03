@@ -26,7 +26,7 @@ register uint8_t bitstore asm("r4");
 
 
 
-void LCD_tx(const volatile uint8_t *data){
+void LCD_tx(const volatile uint8_t *data,uint8_t dc){
 	// need to remove size variable
 	volatile uint8_t out;
 	volatile uint8_t local,xcnt,x,y,zeroes = 0;
@@ -41,6 +41,9 @@ void LCD_tx(const volatile uint8_t *data){
 		xcnt = x;
 	volatile uint16_t size = x*y;
 		y--;
+		
+		if(dc){PORTB |= (1<<P_MOSI);}
+		else{PORTB &= ~(1<<P_MOSI);};
 		
 	do{
 
@@ -59,7 +62,8 @@ void LCD_tx(const volatile uint8_t *data){
 			// check if tx complete
 			//do{_NOP();}
 			while(!(SPSR & (1<<SPIF)));
-			
+			//if(dc){PORTB |= (1<<P_MOSI);}
+			//else{PORTB &= ~(1<<P_MOSI);};
 			SPCR = 0; //disable SPI
 			cli();
 			PORTB |= (1<<P_SCK);
@@ -79,7 +83,8 @@ void LCD_tx(const volatile uint8_t *data){
 		// check if tx complete
 		//do{_NOP();}
 		while(!(SPSR & (1<<SPIF)));
-		
+		//if(dc){PORTB |= (1<<P_MOSI);}
+		//else{PORTB &= ~(1<<P_MOSI);};
 		SPCR = 0; //disable SPI
 		cli();
 		PORTB |= (1<<P_SCK);
@@ -106,15 +111,23 @@ int main()
 
 	init();
 	
-	LCD_tx(LCD_init);
+	PORTD &= (1<<P_LCD_RES);
+	_delay_ms(20);
+	PORTD |= (1<<P_LCD_RES);
+	_delay_ms(20);
+	
+	_NOP();
+	
 
-	LCD_tx(MINI_CIFRA_SP);
+	LCD_tx(LCD_init,tx_cmd);
+
+	//LCD_tx(MINI_CIFRA_SP,tx_data);
 
 	//SPSR |= (1<<SPIF);
 	
-	LCD_tx(ne_CIFRA);
+	//LCD_tx(ne_CIFRA,1);
 	
-	LCD_tx(MINI_CIFRA_3);
+	LCD_tx(MINI_CIFRA_3,1);
 	
 
 	
