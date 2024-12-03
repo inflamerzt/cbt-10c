@@ -145,6 +145,9 @@
     <Compile Include="data.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="drafts.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="functions.S">
       <SubType>compile</SubType>
     </Compile>

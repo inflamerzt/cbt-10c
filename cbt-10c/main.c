@@ -19,28 +19,18 @@ uint8_t TXCountMem;
 uint8_t TXRowCountMem;
 
 
-uint8_t my_value;
-
 register uint8_t bitstore asm("r4");
 
 
-uint8_t my_C_function(uint8_t var){
-	var += 20;
-	_NOP();
-	
-	//asm volatile("nop");
-	return var;
-}  
 
-uint8_t my_value;
+
+
 
 void LCD_tx(const volatile uint8_t *data){
 	// need to remove size variable
 	volatile uint8_t out;
 	volatile uint8_t local,xcnt,x,y,zeroes = 0;
 	
-
-
 	asm volatile
 		(
 		"movw r30,r24" "\n\t"
@@ -69,8 +59,18 @@ void LCD_tx(const volatile uint8_t *data){
 			// check if tx complete
 			//do{_NOP();}
 			while(!(SPSR & (1<<SPIF)));
+			
+			SPCR = 0; //disable SPI
+			cli();
+			PORTB |= (1<<P_SCK);
+			SPCR |= (1<<MSTR)|(1<<SPE);
+			
 			SPDR = local;
+			PORTB &= ~(1<<P_SCK);
+			sei();			
 			out = local;
+
+			
 		} while(zeroes);
 	}
 	else{
@@ -79,8 +79,17 @@ void LCD_tx(const volatile uint8_t *data){
 		// check if tx complete
 		//do{_NOP();}
 		while(!(SPSR & (1<<SPIF)));
+		
+		SPCR = 0; //disable SPI
+		cli();
+		PORTB |= (1<<P_SCK);
+		SPCR |= (1<<MSTR)|(1<<SPE);
+		
 		SPDR = local;
+		PORTB &= ~(1<<P_SCK);
+		sei();		
 		out = local;
+
 	}
 	
 	} while(xcnt); //size
@@ -93,7 +102,7 @@ void LCD_tx(const volatile uint8_t *data){
 int main()
 {
 
-#define bittest (1<<0);
+	//SP = RAMEND;
 
 	init();
 	
@@ -107,11 +116,9 @@ int main()
 	
 	LCD_tx(MINI_CIFRA_3);
 	
-	bitstore |= bittest; 
 
-	SP = RAMEND;
 	
-	bitstore &= ~bittest;
+
 	
 	
 
@@ -275,65 +282,7 @@ Do something usefull when LCD reset pulled low and sleep
 }
 
 
-void drafts(void){
-	
-	
-	
-		volatile uint8_t test;
-		
-		//my_value = sizeof(MINI_CIFRA_SP);
-		test = pgm_read_byte(&MINI_CIFRA_SP[0]);
-		
-		for (uint8_t i=0;i<sizeof(MINI_CIFRA_SP);i++)
-		{
-			my_value = pgm_read_byte(&MINI_CIFRA_SP[i]);
-			PORTB = my_value;
-		}
-		
-		PORTB = test;
-		DDRB = 0xff;
-		asmfunc_calledfrom_c(3);
-		
-		volatile uint8_t test_at;
-		
-		ATOMIC_BLOCK(ATOMIC_FORCEON){
-			test_at = 10;
-		};
-		
-		
-		
-		_NOP();
 
-		
-		
-			//const volatile uint8_t *addr = &MINI_CIFRA_0[0];
-			//volatile uint8_t res;
-			
-			asm volatile(
-			"ldi ZL,lo8(%[addr])\n\t"
-			"ldi ZH,hi8(%[addr])\n\t"
-			//"lpm %0,Z+"
-			://"=r" (res)
-			:[addr] "i" (&MINI_CIFRA_0[0]));
-			//:[addr] "i" (addr));
-			
-			set_Z_pointer(&MINI_CIFRA_0[0]);
-			SPI_start();
-
-
-			uint16_t addr16 = (uint16_t)(&MINI_CIFRA_SP[0]);
-			volatile uint8_t result;
-			asm volatile
-			(
-			"lpm %0, Z" "\n\t"
-			: "=r" (result)
-			: "z" (addr16)
-			);
-		
-		result = 0;
-	
-	
-}
 
 
 void LCD_data(void){
