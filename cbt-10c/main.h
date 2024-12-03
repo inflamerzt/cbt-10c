@@ -150,8 +150,8 @@ const uint8_t SPI_ENABLE = (1<<MSTR)|(1<<SPE);
 
 void init(void);
 
-void LCD_data(void);
-void LCD_cmd(void);
+static inline void LCD_data(void);
+static inline void LCD_cmd(void);
 
 
 extern void asmfunc_calledfrom_c(uint8_t val);

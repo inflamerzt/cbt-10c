@@ -42,8 +42,7 @@ void LCD_tx(const volatile uint8_t *data,uint8_t dc){
 	volatile uint16_t size = x*y;
 		y--;
 		
-		if(dc){PORTB |= (1<<P_MOSI);}
-		else{PORTB &= ~(1<<P_MOSI);};
+		if(dc){LCD_data();} else{LCD_cmd();};
 		
 	do{
 
@@ -121,22 +120,8 @@ int main()
 
 	LCD_tx(LCD_init,tx_cmd);
 
-	//LCD_tx(MINI_CIFRA_SP,tx_data);
-
-	//SPSR |= (1<<SPIF);
-	
-	//LCD_tx(ne_CIFRA,1);
-	
 	LCD_tx(MINI_CIFRA_3,1);
 	
-
-	
-
-	
-	
-
-
-
 
 
 	while(1);
@@ -298,10 +283,6 @@ Do something usefull when LCD reset pulled low and sleep
 
 
 
-void LCD_data(void){
-	
-	};
-void LCD_cmd(void){
-	
-	};
+static inline void LCD_data(void){ PORTB |= (1<<P_MOSI); };
+static inline void LCD_cmd(void){ PORTB &= ~(1<<P_MOSI); };
 	
