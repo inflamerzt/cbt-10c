@@ -13,15 +13,15 @@
 
 //#include "interrupts.s"
 
-extern void asmfunc_calledfrom_c(uint8_t val);
 
-extern void SPI_start(void);
 
 uint8_t TXCountMem;
 uint8_t TXRowCountMem;
 
 
 uint8_t my_value;
+
+register uint8_t bitstore asm("r4");
 
 
 uint8_t my_C_function(uint8_t var){
@@ -34,71 +34,95 @@ uint8_t my_C_function(uint8_t var){
 
 uint8_t my_value;
 
+void LCD_tx(const volatile uint8_t *data){
+	// need to remove size variable
+	volatile uint8_t out;
+	volatile uint8_t local,xcnt,x,y,zeroes = 0;
+	
+
+
+	asm volatile
+		(
+		"movw r30,r24" "\n\t"
+		"lpm %0, Z+" "\n\t"
+		"lpm %1, Z+" "\n\t"
+		: "=r" (x), "=r" (y):);
+		if (!y){y++;};
+		xcnt = x;
+	volatile uint16_t size = x*y;
+		y--;
+		
+	do{
+
+		
+	//local = pgm_read_byte(data[size]);
+	asm volatile("lpm %0, Z+" "\n\t" : "=r" (local) :);
+	if (!local)
+	{
+
+		asm volatile("lpm %0, Z+" "\n\t" : "=r" (zeroes):);
+		do {
+			
+			
+			zeroes--; size--;xcnt--;
+			if (!xcnt){if(y){y--;xcnt = x;}}
+			// check if tx complete
+			//do{_NOP();}
+			while(!(SPSR & (1<<SPIF)));
+			SPDR = local;
+			out = local;
+		} while(zeroes);
+	}
+	else{
+		size--;xcnt--;
+		if (!xcnt){if(y){y--;xcnt = x;}}
+		// check if tx complete
+		//do{_NOP();}
+		while(!(SPSR & (1<<SPIF)));
+		SPDR = local;
+		out = local;
+	}
+	
+	} while(xcnt); //size
+	
+	//return local;
+};
+
+
+
 int main()
 {
-	
-	SP = RAMEND;
-	
-	
+
+#define bittest (1<<0);
+
 	init();
 	
-	const volatile uint8_t *addr = &MINI_CIFRA_0[0];
-	volatile uint8_t res;
-	
-	asm volatile(
-	"ldi ZL,lo8(%[addr])\n\t"
-	"ldi ZH,hi8(%[addr])\n\t"
-	//"lpm %0,Z+"
-	://"=r" (res)
-	:[addr] "i" (&MINI_CIFRA_0[0]));
-	//:[addr] "i" (addr));
-	
-	set_Z_pointer(&MINI_CIFRA_0[0]);
-	SPI_start();
+	LCD_tx(LCD_init);
 
+	LCD_tx(MINI_CIFRA_SP);
 
-    uint16_t addr16 = (uint16_t)(&MINI_CIFRA_SP[0]);
-    volatile uint8_t result;
-    asm volatile
-    (
-    "lpm %0, Z" "\n\t"  
-    : "=r" (result)
-    : "z" (addr16)
-    );	
+	//SPSR |= (1<<SPIF);
+	
+	LCD_tx(ne_CIFRA);
+	
+	LCD_tx(MINI_CIFRA_3);
+	
+	bitstore |= bittest; 
+
+	SP = RAMEND;
+	
+	bitstore &= ~bittest;
+	
 	
 
-	result = 0;
+
+
+
+
 	while(1);
 	//return 0;
 	// never run section for tests only
-	
-		volatile uint8_t test;
-		
-		//my_value = sizeof(MINI_CIFRA_SP);
-		test = pgm_read_byte(&MINI_CIFRA_SP[0]);
-		
-		for (uint8_t i=0;i<sizeof(MINI_CIFRA_SP);i++)
-		{
-			my_value = pgm_read_byte(&MINI_CIFRA_SP[i]);
-			PORTB = my_value;
-		}
-		
-		PORTB = test;
-		DDRB = 0xff;
-		asmfunc_calledfrom_c(3);
-		
-		volatile uint8_t test_at;
-		
-		ATOMIC_BLOCK(ATOMIC_FORCEON){
-		test_at = 10;	
-		};
-		
-		
-		
-		_NOP();        
 
-	
-	
 	
 }
 
@@ -173,6 +197,7 @@ Do something usefull when LCD reset pulled low and sleep
 
 		SPCR |= SPI_ENABLE;
 		SPSR |= (1<<SPI2X);
+		SPDR = 0;
 
 		//sleep_cpu();
 		
@@ -248,3 +273,73 @@ Do something usefull when LCD reset pulled low and sleep
 			*/
 	
 }
+
+
+void drafts(void){
+	
+	
+	
+		volatile uint8_t test;
+		
+		//my_value = sizeof(MINI_CIFRA_SP);
+		test = pgm_read_byte(&MINI_CIFRA_SP[0]);
+		
+		for (uint8_t i=0;i<sizeof(MINI_CIFRA_SP);i++)
+		{
+			my_value = pgm_read_byte(&MINI_CIFRA_SP[i]);
+			PORTB = my_value;
+		}
+		
+		PORTB = test;
+		DDRB = 0xff;
+		asmfunc_calledfrom_c(3);
+		
+		volatile uint8_t test_at;
+		
+		ATOMIC_BLOCK(ATOMIC_FORCEON){
+			test_at = 10;
+		};
+		
+		
+		
+		_NOP();
+
+		
+		
+			//const volatile uint8_t *addr = &MINI_CIFRA_0[0];
+			//volatile uint8_t res;
+			
+			asm volatile(
+			"ldi ZL,lo8(%[addr])\n\t"
+			"ldi ZH,hi8(%[addr])\n\t"
+			//"lpm %0,Z+"
+			://"=r" (res)
+			:[addr] "i" (&MINI_CIFRA_0[0]));
+			//:[addr] "i" (addr));
+			
+			set_Z_pointer(&MINI_CIFRA_0[0]);
+			SPI_start();
+
+
+			uint16_t addr16 = (uint16_t)(&MINI_CIFRA_SP[0]);
+			volatile uint8_t result;
+			asm volatile
+			(
+			"lpm %0, Z" "\n\t"
+			: "=r" (result)
+			: "z" (addr16)
+			);
+		
+		result = 0;
+	
+	
+}
+
+
+void LCD_data(void){
+	
+	};
+void LCD_cmd(void){
+	
+	};
+	

@@ -12,7 +12,7 @@
 #include <util/atomic.h>
 #include <time.h>
 
-
+#include <stdbool.h>
 
 #include "data.h"
 #include "cinterrupts.h"
@@ -146,8 +146,12 @@ const uint8_t SPI_ENABLE = (1<<MSTR)|(1<<SPE);
 
 void init(void);
 
+void LCD_data(void);
+void LCD_cmd(void);
 
 
+extern void asmfunc_calledfrom_c(uint8_t val);
+extern void SPI_start(void);
 
 
 PROGMEM volatile const uint8_t LCD_init[] = {
