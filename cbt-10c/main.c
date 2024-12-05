@@ -13,7 +13,7 @@
 
 //#include "interrupts.s"
 
-
+static inline void LCD_reset(void);
 
 uint8_t TXCountMem;
 uint8_t TXRowCountMem;
@@ -66,7 +66,7 @@ void LCD_tx(const volatile uint8_t *data,uint8_t dc){
 			SPCR = 0; //disable SPI
 			cli();
 			PORTB |= (1<<P_SCK);
-			SPCR |= (1<<MSTR)|(1<<SPE);
+			SPCR |= SPI_ENABLE;//(1<<MSTR)|(1<<SPE);
 			
 			SPDR = local;
 			PORTB &= ~(1<<P_SCK);
@@ -87,7 +87,7 @@ void LCD_tx(const volatile uint8_t *data,uint8_t dc){
 		SPCR = 0; //disable SPI
 		cli();
 		PORTB |= (1<<P_SCK);
-		SPCR |= (1<<MSTR)|(1<<SPE);
+		SPCR |= SPI_ENABLE;//(1<<MSTR)|(1<<SPE);
 		
 		SPDR = local;
 		PORTB &= ~(1<<P_SCK);
@@ -110,10 +110,7 @@ int main()
 
 	init();
 	
-	PORTD &= (1<<P_LCD_RES);
-	_delay_ms(20);
-	PORTD |= (1<<P_LCD_RES);
-	_delay_ms(20);
+	LCD_reset();
 	
 	_NOP();
 	
@@ -134,8 +131,9 @@ int main()
 void init(void){
 
 		PRR = (1<<PRTWI)|(1<<PRUSART0);
-		SMCR = (1<<SE);//|(2<<SM0); //; idle sm=000
+		//SMCR = (1<<SE);//|(2<<SM0); //; idle sm=000
 		DDRD = (1<<P_LCD_RES)|(1<<P_bDiode)|(1<<P_bCap)|(1<<P_bTrans)|(1<<PD6);
+		PORTD &= (1<<P_LCD_RES);
 		
 		//;=SPI init
 		DDR_SPI = (1<<P_SS)|(1<<P_SCK)|(1<<P_MOSI);
@@ -146,6 +144,7 @@ void init(void){
 		Vmeas_port |= P_Vmeas;
 		
 		set_sleep_mode(SLEEP_MODE_IDLE);
+		//set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 		sleep_enable();
 		//sei();
 		
@@ -165,12 +164,11 @@ void init(void){
 		; 10ms is a long time do something before sleep and release reset
 		; code injection under LCD reset
 */
-		
-		TIFR0 = 0;
-		TIMSK0 |= (1<<OCIE0A);
-		OCR0A = 80;
-		TCCR0B |= (5<<CS00);
-		TCNT0 = 0;
+		//TIFR0 = 0;
+		//TIMSK0 |= (1<<OCIE0A);
+		//OCR0A = 80;
+		//TCCR0B |= (5<<CS00);
+		//TCNT0 = 0;
 		
 		PORTD &= ~(1<<P_LCD_RES);
 		
@@ -202,11 +200,11 @@ Do something usefull when LCD reset pulled low and sleep
 
 		SPCR |= SPI_ENABLE;
 		SPSR |= (1<<SPI2X);
-		SPDR = 0;
+		SPDR = 0; // send empty byte to activate SPI_interrupt flag
 
 		//sleep_cpu();
 		
-		PORTD |= (1<<P_LCD_RES);
+		//PORTD |= (1<<P_LCD_RES);
 		
 		//sleep_cpu();
 		
@@ -214,7 +212,7 @@ Do something usefull when LCD reset pulled low and sleep
 		TIMSK0 = 0;
 		
 		cli();
-		
+//;----------------- remove this string with booster enabled
 		PORTC |= (1<<P_boostFB);
 		
 		
@@ -285,4 +283,12 @@ Do something usefull when LCD reset pulled low and sleep
 
 static inline void LCD_data(void){ PORTB |= (1<<P_MOSI); };
 static inline void LCD_cmd(void){ PORTB &= ~(1<<P_MOSI); };
+	
+static inline void LCD_reset(void) {
+		PORTD &= (1<<P_LCD_RES);
+		_delay_ms(20);
+		PORTD |= (1<<P_LCD_RES);
+		_delay_ms(20);
+
+	};
 	
