@@ -22,7 +22,12 @@ uint8_t TXRowCountMem;
 register uint8_t bitstore asm("r4");
 
 
-
+typedef enum {
+	FIRST = 1 << 0, // same as 1
+	SECOND = 1 << 1, // same as 2, binary 10
+	THIRD = 1 << 2, // same as 4, binary 100
+	FOURTH = 1 << 3 // same as 8, binary 1000
+} flags;
 
 
 
@@ -114,10 +119,16 @@ int main()
 	
 	_NOP();
 	
+	
+	//uint8_t flags = FIRST | SECOND| THIRD | FOURTH;
+	volatile flags flag;
+	flag = FIRST; //| SECOND;
+	
+	bitstore |= 0x01;
 
 	LCD_tx(LCD_init,tx_cmd);
 
-	LCD_tx(MINI_CIFRA_3,1);
+	LCD_tx(MINI_CIFRA_3,tx_data);
 	
 
 
@@ -133,7 +144,7 @@ void init(void){
 		PRR = (1<<PRTWI)|(1<<PRUSART0);
 		//SMCR = (1<<SE);//|(2<<SM0); //; idle sm=000
 		DDRD = (1<<P_LCD_RES)|(1<<P_bDiode)|(1<<P_bCap)|(1<<P_bTrans)|(1<<PD6);
-		PORTD &= (1<<P_LCD_RES);
+		PORTD &= ~(1<<P_LCD_RES);
 		
 		//;=SPI init
 		DDR_SPI = (1<<P_SS)|(1<<P_SCK)|(1<<P_MOSI);
@@ -153,6 +164,8 @@ void init(void){
 		
 		sei();
 		
+		
+		
 		/*
 		;delay for LCD reset must be implemented 2500ns pull low, 2500ns after reset
 		; 10 - 100ms hx1230 recomendation
@@ -170,7 +183,7 @@ void init(void){
 		//TCCR0B |= (5<<CS00);
 		//TCNT0 = 0;
 		
-		PORTD &= ~(1<<P_LCD_RES);
+
 		
 /*=======================================================
 Do something usefull when LCD reset pulled low and sleep
