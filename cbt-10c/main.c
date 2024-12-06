@@ -17,6 +17,8 @@ struct {
 
 
 
+
+
 //#include "interrupts.s"
 
 static inline void LCD_reset(void);
@@ -44,6 +46,8 @@ int main()
 
 
 	//SP = RAMEND;
+	
+
 
 	init();
 	
@@ -62,7 +66,9 @@ int main()
 	
 	LCD_xy(0,0);
 	
-	LCD_puts(ne_CIFRA,tx_data);
+	LCD_puts(MINI_CIFRA_SP,tx_data);
+	
+	LCD_puts(s_d.d0,tx_data);
 
 do {
 	LCD_puts(MINI_CIFRA_3,tx_data);
