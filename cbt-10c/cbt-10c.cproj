@@ -145,13 +145,28 @@
     <Compile Include="data.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="defines.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="drafts.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="functions.S">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="init.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="init.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="interrupts.S">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LCD.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LCD.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
