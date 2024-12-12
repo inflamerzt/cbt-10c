@@ -27,6 +27,7 @@ volatile uint8_t T1_ovf_count;
 
 static inline void LCD_reset(void);
 
+uint32_t GetCPS(void);
 
 
 register uint8_t bitstore asm("r4");
@@ -66,6 +67,7 @@ alarm_el.img = alarm_pic;
 	start_count_cps();
 	stop_count_cps();
 
+	//testvar = GetCPS();
 	
 
 	init();
@@ -105,12 +107,12 @@ alarm_el.img = alarm_pic;
 			index--;
 		} while (index);
 	
+	start_count_cps();
 
 do {
 	LCD_xy(0,0);
 	
-
-	BCD_conversion24(testvar);
+	BCD_conversion24(GetCPS());
 	
 	index = 8;
 	do 
@@ -119,11 +121,7 @@ do {
 	index--;
 	} while (index);
 
-	testvar--;
-	if (!testvar)
-	{
-		testvar = 0xFFFFFF;
-	}
+
 
 	_delay_ms(1000);
 }
@@ -142,5 +140,15 @@ static inline void LCD_reset(void) {
 		PORTD |= (1<<P_LCD_RES);
 		_delay_ms(10);
 
+	};
+	
+
+uint32_t GetCPS(void){
+	uint32_t value;
+	value = T1_ovf_count;
+	value = ((value<<16) | TCNT1);
+	TCNT1 = 0;
+	T1_ovf_count = 0;	
+	return value;
 	};
 	
