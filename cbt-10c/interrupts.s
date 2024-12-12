@@ -31,3 +31,10 @@ INT0_vect:
 
 
 reti
+
+//.global 
+
+;.global TIMER1_OVF_vect
+;TIMER1_OVF_vect:
+
+;reti

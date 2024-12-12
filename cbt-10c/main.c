@@ -19,7 +19,8 @@ struct {
 
 Element alarm_el;
 
-
+volatile uint16_t current_cps_count; //maybe will be not a global var
+volatile uint8_t T1_ovf_count;
 
 
 //#include "interrupts.s"
@@ -61,6 +62,10 @@ alarm_el.X = 0;
 alarm_el.Y = 0;
 alarm_el.img = alarm_pic;
 
+
+	start_count_cps();
+	stop_count_cps();
+
 	
 
 	init();
@@ -73,6 +78,7 @@ alarm_el.img = alarm_pic;
 	
 	LCD_clr();
 	
+	LCD_element(alarm_el);
 
 	
 	//LCD_xy(50,0);

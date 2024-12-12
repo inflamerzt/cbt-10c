@@ -7,6 +7,7 @@
 
 #include "init.h"
 
+
 extern volatile const uint8_t* smDig[10];
 
 void init(void){
@@ -172,3 +173,16 @@ Do something usefull when LCD reset pulled low and sleep
 			*/
 	
 }
+
+void start_count_cps(void){
+	TCNT1 = 0;
+	//TCCR1A = 0;
+	TCCR1B = (7<<CS00) ;
+	//TCCR1C = 0;
+	TIMSK1 = (1<<TOIE1);
+	};
+
+void stop_count_cps(void){
+	TCCR1B = 0;
+	TIMSK1 = 0;	
+	};
