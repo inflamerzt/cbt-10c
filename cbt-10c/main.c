@@ -26,9 +26,6 @@ Element alarm_el;
 
 static inline void LCD_reset(void);
 
-uint8_t TXCountMem;
-uint8_t TXRowCountMem;
-
 
 
 register uint8_t bitstore asm("r4");
@@ -52,9 +49,9 @@ int main()
 	//SP = RAMEND;
 	
 	volatile uint32_t testvar;
-	volatile uint32_t res;
-	volatile uint8_t result;
-	volatile uint8_t result1;
+	//volatile uint32_t res;
+	//volatile uint8_t result;
+	//volatile uint8_t result1;
 	
 	volatile uint16_t testvar16;
 
@@ -78,12 +75,8 @@ alarm_el.img = alarm_pic;
 	
 
 	
-	//LCD_send(MINI_CIFRA_SP,tx_data);
-	
-	//LCD_send(smDig[0],tx_data);
-	
-	LCD_xy(50,0);
-	LCD_send(alarm_el.img,tx_data);
+	//LCD_xy(50,0);
+	//LCD_send(alarm_el.img,tx_data);
 	
 	
 		testvar = 0xF;
@@ -137,12 +130,6 @@ do {
 
 
 
-
-
-
-
-
-	
 static inline void LCD_reset(void) {
 		PORTD &= (1<<P_LCD_RES);
 		_delay_ms(10);

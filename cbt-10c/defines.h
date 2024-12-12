@@ -133,20 +133,6 @@
 }))
 
 
-struct{
-	const volatile uint8_t *d0;
-	const volatile uint8_t *d1;
-	const volatile uint8_t *d2;
-	const volatile uint8_t *d3;
-	const volatile uint8_t *d4;
-	const volatile uint8_t *d5;
-	const volatile uint8_t *d6;
-	const volatile uint8_t *d7;
-	const volatile uint8_t *d8;
-	const volatile uint8_t *d9;
-}sm;
-
-
 
 #define SPI_ENABLE (1<<MSTR)|(1<<SPE)
 

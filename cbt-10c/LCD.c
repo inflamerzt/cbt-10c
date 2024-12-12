@@ -2,6 +2,9 @@
 
 extern Element alarm_el;
 
+volatile uint8_t LCD_pos_X;
+volatile uint8_t LCD_pos_Y;
+
 static inline void LCD_data(void){ PORTB |= (1<<P_MOSI); };
 static inline void LCD_cmd(void){ PORTB &= ~(1<<P_MOSI); };
 
@@ -34,7 +37,7 @@ void LCD_send(const volatile uint8_t *data,uint8_t dc){
 		xcnt--;
 		if (!xcnt){if(y){
 			y--;xcnt = x;
-			//LCD_xy(50,0);
+			LCD_goto_xy(LCD_pos_X,LCD_pos_Y-y);
 			}}
 		SPI_tx(local);
 		
@@ -54,6 +57,12 @@ void SPI_tx(uint8_t data){
 }
 
 void LCD_xy(uint8_t X,uint8_t Y){
+	LCD_pos_X = X;
+	LCD_pos_Y = Y;
+	LCD_goto_xy(X,Y);
+}
+
+void LCD_goto_xy(uint8_t X,uint8_t Y){
 	LCD_cmd();
 	//;=== set X
 	//;=== low 4 bits
