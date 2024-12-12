@@ -11,6 +11,7 @@ void LCD_xy(uint8_t X,uint8_t Y); // maybe make as define or macro
 void LCD_goto_xy(uint8_t X,uint8_t Y);
 void LCD_clr(void);
 void LCD_sp(uint8_t i);
+void LCD_element(Element data);
 
 
 #endif /* LCD_H_ */

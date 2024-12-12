@@ -104,6 +104,11 @@ void LCD_sp(uint8_t i){
 	
 	
 	};
-	
+
+
+void LCD_element(Element data){
+	LCD_xy(data.X,data.Y);
+	LCD_send(data.img,tx_data);
+	};
 	
 

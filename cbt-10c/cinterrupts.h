@@ -7,7 +7,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-ISR(INT0_vect);
+//ISR(INT0_vect);
 ISR(PCINT1_vect);
 
 
