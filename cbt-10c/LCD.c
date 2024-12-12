@@ -1,10 +1,11 @@
 #include "LCD.h"
 
+extern Element alarm_el;
 
 static inline void LCD_data(void){ PORTB |= (1<<P_MOSI); };
 static inline void LCD_cmd(void){ PORTB &= ~(1<<P_MOSI); };
 
-void LCD_puts(const volatile uint8_t *data,uint8_t dc){
+void LCD_send(const volatile uint8_t *data,uint8_t dc){
 	volatile uint8_t local,xcnt,x,y,zeroes = 0;
 	
 	asm volatile
@@ -31,7 +32,10 @@ void LCD_puts(const volatile uint8_t *data,uint8_t dc){
 		}
 		
 		xcnt--;
-		if (!xcnt){if(y){y--;xcnt = x;}}
+		if (!xcnt){if(y){
+			y--;xcnt = x;
+			//LCD_xy(50,0);
+			}}
 		SPI_tx(local);
 		
 	} while(xcnt); //size
@@ -50,5 +54,47 @@ void SPI_tx(uint8_t data){
 }
 
 void LCD_xy(uint8_t X,uint8_t Y){
+	LCD_cmd();
+	//;=== set X
+	//;=== low 4 bits
+	SPI_tx((X&0x0F));
+	//;=== high 3 bits
+	SPI_tx(((X>>4)&0x0F)|0x10);
+	//SPI_tx((X>>4)|0x10);
+	
+	//;=== set Y
+	SPI_tx((Y|0xB0));
 	
 }
+
+void LCD_clr(void){
+	uint8_t x = 96, y=9;
+
+	LCD_data();
+	do 
+	{
+		do 
+		{
+			x--;
+			SPI_tx(0);	
+		} while (x);
+		x = 96; y--;
+	} while (y);
+	
+	
+	};
+	
+	
+void LCD_sp(uint8_t i){
+	LCD_cmd();
+	do 
+	{
+		i--;
+		SPI_tx(0);
+	} while (i);
+	
+	
+	};
+	
+	
+

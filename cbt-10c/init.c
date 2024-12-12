@@ -7,7 +7,7 @@
 
 #include "init.h"
 
-
+extern volatile const uint8_t* smDig[10];
 
 void init(void){
 
@@ -59,18 +59,17 @@ void init(void){
 Do something usefull when LCD reset pulled low and sleep
 =========================================================*/
 
+	smDig[0] = MINI_CIFRA_0;
+	smDig[1] = MINI_CIFRA_1;
+	smDig[2] = MINI_CIFRA_2;
+	smDig[3] = MINI_CIFRA_3;
+	smDig[4] = MINI_CIFRA_4;
+	smDig[5] = MINI_CIFRA_5;
+	smDig[6] = MINI_CIFRA_6;
+	smDig[7] = MINI_CIFRA_7;
+	smDig[8] = MINI_CIFRA_8;
+	smDig[9] = MINI_CIFRA_9;
 
-
-	s_d.d0 = MINI_CIFRA_0;
-	s_d.d1 = MINI_CIFRA_1;
-	s_d.d2 = MINI_CIFRA_2;
-	s_d.d3 = MINI_CIFRA_3;
-	s_d.d4 = MINI_CIFRA_4;
-	s_d.d5 = MINI_CIFRA_5;
-	s_d.d6 = MINI_CIFRA_6;
-	s_d.d7 = MINI_CIFRA_7;
-	s_d.d8 = MINI_CIFRA_8;
-	s_d.d9 = MINI_CIFRA_9;
 
 
 /* 

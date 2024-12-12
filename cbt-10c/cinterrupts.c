@@ -9,5 +9,9 @@
 
 ISR(INT0_vect)
 {
-	PORTB = 42;
+	//PORTB = 42;
+};
+
+ISR(PCINT1_vect){
+	
 };

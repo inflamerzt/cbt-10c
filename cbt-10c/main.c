@@ -17,6 +17,9 @@ struct {
 
 
 
+Element alarm_el;
+
+
 
 
 //#include "interrupts.s"
@@ -25,6 +28,7 @@ static inline void LCD_reset(void);
 
 uint8_t TXCountMem;
 uint8_t TXRowCountMem;
+
 
 
 register uint8_t bitstore asm("r4");
@@ -47,32 +51,81 @@ int main()
 
 	//SP = RAMEND;
 	
+	volatile uint32_t testvar;
+	volatile uint32_t res;
+	volatile uint8_t result;
+	volatile uint8_t result1;
+	
+	volatile uint16_t testvar16;
 
+
+
+alarm_el.X = 0;
+alarm_el.Y = 0;
+alarm_el.img = alarm_pic;
+
+	
 
 	init();
 	
 	LCD_reset();
 	
-	_NOP();
+	LCD_send(LCD_init,tx_cmd);
 	
+	//LCD_sp(5);
 	
-	//uint8_t flags = FIRST | SECOND| THIRD | FOURTH;
-	volatile flags flag;
-	flag = FIRST; //| SECOND;
+	LCD_clr();
 	
-	bitstore |= 0x01;
 
-	LCD_puts(LCD_init,tx_cmd);
 	
-	LCD_xy(0,0);
+	//LCD_send(MINI_CIFRA_SP,tx_data);
 	
-	LCD_puts(MINI_CIFRA_SP,tx_data);
+	//LCD_send(smDig[0],tx_data);
 	
-	LCD_puts(s_d.d0,tx_data);
+	LCD_xy(50,0);
+	LCD_send(alarm_el.img,tx_data);
+	
+	
+		testvar = 0xF;
+		uint8_t index;
+	LCD_xy(0,4);
+	
+	testvar16 = BCD_conversion8(99);
+	
+	LCD_send(smDig[testvar16>>8],tx_data);
+	LCD_send(smDig[testvar16&0xFF],tx_data);
+
+	testvar16 = 0xFFFF;
+
+	LCD_xy(0,2);
+	index = 5;
+			BCD_conversion24(testvar16);
+		do
+		{
+			LCD_send(smDig[BCD[index-1]],tx_data);
+			index--;
+		} while (index);
+	
 
 do {
-	LCD_puts(MINI_CIFRA_3,tx_data);
+	LCD_xy(0,0);
 	
+
+	BCD_conversion24(testvar);
+	
+	index = 8;
+	do 
+	{
+	LCD_send(smDig[BCD[index-1]],tx_data);
+	index--;
+	} while (index);
+
+	testvar--;
+	if (!testvar)
+	{
+		testvar = 0xFFFFFF;
+	}
+
 	_delay_ms(1000);
 }
 	while(1);

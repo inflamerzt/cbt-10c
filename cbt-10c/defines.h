@@ -133,7 +133,7 @@
 }))
 
 
-struct {
+struct{
 	const volatile uint8_t *d0;
 	const volatile uint8_t *d1;
 	const volatile uint8_t *d2;
@@ -144,10 +144,17 @@ struct {
 	const volatile uint8_t *d7;
 	const volatile uint8_t *d8;
 	const volatile uint8_t *d9;
-}s_d;
+}sm;
 
 
 
 #define SPI_ENABLE (1<<MSTR)|(1<<SPE)
+
+
+typedef struct {
+	uint8_t X;
+	uint8_t Y;
+	const volatile uint8_t * img;
+} Element;
 
 #endif /* DEFINES_H_ */
