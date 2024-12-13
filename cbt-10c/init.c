@@ -48,11 +48,11 @@ void init(void){
 		; 10ms is a long time do something before sleep and release reset
 		; code injection under LCD reset
 */
-		//TIFR0 = 0;
-		//TIMSK0 |= (1<<OCIE0A);
-		//OCR0A = 80;
-		//TCCR0B |= (5<<CS00);
-		//TCNT0 = 0;
+		TIFR0 = 0;
+		TIMSK0 |= (1<<OCIE0A);
+		OCR0A = 80;
+		TCCR0B |= (5<<CS00);
+		TCNT0 = 0;
 		
 
 		
@@ -99,11 +99,14 @@ Do something usefull when LCD reset pulled low and sleep
 		SPSR |= (1<<SPI2X);
 		SPDR = 0; // send empty byte to activate SPI_interrupt flag
 
-		//sleep_cpu();
+		sleep_cpu();
 		
-		//PORTD |= (1<<P_LCD_RES);
+		PORTD |= (1<<P_LCD_RES);
+/*=======================================================
+Do something usefull LCD delay after reset and sleep
+=========================================================*/		
 		
-		//sleep_cpu();
+		sleep_cpu();
 		
 		TCCR0B = 0;
 		TIMSK0 = 0;

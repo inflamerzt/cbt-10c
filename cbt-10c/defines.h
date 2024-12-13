@@ -119,6 +119,9 @@
 
 //#define TXCount r16;(TXCount)
 
+#define inv_dis inversion=0xFF;
+#define nor_dis inversion=0;
+
 
 #define set_Z_pointer(zaddr) \
 (__extension__({                \

@@ -6,6 +6,7 @@
  */ 
 
 #include "cinterrupts.h"
+#include "avr/cpufunc.h"
 
 extern uint8_t T1_ovf_count;
 
@@ -21,3 +22,13 @@ ISR(PCINT1_vect){
 };
 
 ISR(TIMER1_OVF_vect){T1_ovf_count++;};
+	
+	
+ISR(TIMER0_COMPA_vect){
+	_NOP();
+	};
+
+
+ISR(TIMER0_OVF_vect){
+	_NOP();
+	};
