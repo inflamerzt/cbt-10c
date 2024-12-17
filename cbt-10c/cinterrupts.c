@@ -17,8 +17,15 @@ ISR(INT0_vect)
 };
 */
 
-ISR(PCINT1_vect){
+extern volatile uint16_t int_cps;
+
+ISR(INT1_vect){
 	
+		int_cps++;
+};
+
+ISR(PCINT1_vect){
+
 };
 
 ISR(TIMER1_OVF_vect){T1_ovf_count++;};

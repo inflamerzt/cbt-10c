@@ -22,6 +22,7 @@ Element count_el;
 
 volatile uint16_t current_cps_count; //maybe will be not a global var
 volatile uint8_t T1_ovf_count;
+volatile uint16_t int_cps;
 
 volatile uint8_t inversion;
 
@@ -124,21 +125,35 @@ count_el.img = count_pic;
 	LCD_send(smDig[testvar16>>8],tx_data);
 	LCD_send(smDig[testvar16&0xFF],tx_data);
 */
-	testvar16 = 0xFFFF;
+	/*testvar16 = 0xFFFF;
 
 	LCD_xy(0,2);
 	BCD_conversion24(testvar16);
 	number_display(5);
+*/
+	int_cps =0;
 
-
-	
+	EIMSK |= (1<<INT1);
 	start_count_cps();
+	
+	volatile uint16_t int_cps_buffer;
 
 do {
 	LCD_xy(0,0);
 	
 	BCD_conversion24(GetCPS());
 	number_display(8);
+	
+	
+	/*
+	LCD_xy(0,2);
+	int_cps_buffer = int_cps;
+	int_cps = 0;
+	BCD_conversion16(int_cps_buffer);
+	number_display(5);
+*/
+
+	
 /*	
 	index = 8;
 	do 

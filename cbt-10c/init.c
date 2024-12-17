@@ -152,6 +152,9 @@ Do something usefull LCD delay after reset and sleep
 			PCICR |= (1<<PCIE1);
 			PCMSK1 |= (1<<PCINT9)|(1<<PCINT10)|(1<<PCINT11);
 			
+			EICRA |= (3<<ISC10);
+			//EIMSK |= (1<<INT1);
+			
 			/*
 				.ifdef meas_pin_vcc
 				sbi Vmeas_port, P_Vmeas
