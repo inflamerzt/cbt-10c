@@ -28,8 +28,14 @@ asmfunc_calledfrom_c:           ; Start of asmfunc_calledfrom_c subroutine
 
 .global INT0_vect
 INT0_vect:
+nop
+
+reti
 
 
+.global TIMER0_OVF_vect
+TIMER0_OVF_vect:
+nop
 reti
 
 //.global 

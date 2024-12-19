@@ -22,13 +22,12 @@ Element count_el;
 
 volatile uint16_t current_cps_count; //maybe will be not a global var
 volatile uint8_t T1_ovf_count;
-volatile uint16_t int_cps;
+
 
 volatile uint8_t inversion;
 
 //#include "interrupts.s"
 
-//static inline void LCD_reset(void);
 
 uint32_t GetCPS(void);
 inline void number_display(uint8_t size);
@@ -56,11 +55,6 @@ int main()
 	//SP = RAMEND;
 	
 	nor_dis;
-	
-	//volatile uint32_t testvar;
-	//volatile uint32_t res;
-	//volatile uint8_t result;
-	//volatile uint8_t result1;
 	
 	volatile uint16_t testvar16;
 
@@ -109,8 +103,8 @@ count_el.img = count_pic;
 	//LCD_send(alarm_el.img,tx_data);
 	
 	
-		//testvar = 0xF;
-		uint8_t index;
+
+	uint8_t index;
 	LCD_xy(0,4);
 	
 	dnumber_display(99);
@@ -119,19 +113,14 @@ count_el.img = count_pic;
 		
 	//dnumber_display(88);
 	
-	/*
-	testvar16 = BCD_conversion8(99);
-	
-	LCD_send(smDig[testvar16>>8],tx_data);
-	LCD_send(smDig[testvar16&0xFF],tx_data);
-*/
+
 	/*testvar16 = 0xFFFF;
 
 	LCD_xy(0,2);
 	BCD_conversion24(testvar16);
 	number_display(5);
 */
-	int_cps =0;
+	
 
 	EIMSK |= (1<<INT1);
 	start_count_cps();
@@ -145,25 +134,6 @@ do {
 	number_display(8);
 	
 	
-	/*
-	LCD_xy(0,2);
-	int_cps_buffer = int_cps;
-	int_cps = 0;
-	BCD_conversion16(int_cps_buffer);
-	number_display(5);
-*/
-
-	
-/*	
-	index = 8;
-	do 
-	{
-	LCD_send(smDig[BCD[index-1]],tx_data);
-	index--;
-	} while (index);
-*/
-
-
 	_delay_ms(1000);
 }
 	while(1);
@@ -173,17 +143,7 @@ do {
 	
 }
 
-/*
-
-static inline void LCD_reset(void) {
-		PORTD &= (1<<P_LCD_RES);
-		_delay_ms(10);
-		PORTD |= (1<<P_LCD_RES);
-		_delay_ms(10);
-
-	};
-	
-*/
+//=======================================================================================
 
 uint32_t GetCPS(void){
 	uint32_t value;

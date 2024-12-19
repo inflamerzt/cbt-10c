@@ -17,11 +17,11 @@ ISR(INT0_vect)
 };
 */
 
-extern volatile uint16_t int_cps;
+
 
 ISR(INT1_vect){
 	
-		int_cps++;
+		
 };
 
 ISR(PCINT1_vect){
@@ -35,7 +35,9 @@ ISR(TIMER0_COMPA_vect){
 	_NOP();
 	};
 
-
+/*
 ISR(TIMER0_OVF_vect){
-	_NOP();
+	_NOP(); //wake from sleep
 	};
+	
+	*/

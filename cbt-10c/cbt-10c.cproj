@@ -148,7 +148,7 @@
     <Compile Include="defines.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="drafts.c">
+    <Compile Include="drafts.txt">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="functions.S">
