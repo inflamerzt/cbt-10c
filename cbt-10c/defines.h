@@ -9,13 +9,23 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
-/*
+#ifdef __ASSEMBLER__
+
+#define tmpreg r16
+#define tmpregh r17
+
+
 #define DDR_booster DDRD
 #define PORT_booster PORTD
 #define P_bDiode PD0
 #define P_bCap PD1
 #define P_bTrans PD2
+#define	P_boostFB PC5
 
+#else
+
+
+/*
 
 #define DDR_LCD_RST DDRD
 #define P_LCD_RES PD7
@@ -146,4 +156,6 @@ typedef struct {
 	const volatile uint8_t * img;
 } Element;
 
+
+#endif
 #endif /* DEFINES_H_ */

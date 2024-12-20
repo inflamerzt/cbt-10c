@@ -31,13 +31,26 @@ ISR(PCINT1_vect){
 ISR(TIMER1_OVF_vect){T1_ovf_count++;};
 	
 	
+	
+/*	
 ISR(TIMER0_COMPA_vect){
 	_NOP();
 	};
 
-/*
+
 ISR(TIMER0_OVF_vect){
 	_NOP(); //wake from sleep
 	};
+*/
 	
+ISR(TIMER2_COMPA_vect){
+	_NOP(); //wake from sleep
+	};
+
+
+/*
+ISR(TIMER2_OVF_vect){
+	_NOP();
+	};
 	*/
+	

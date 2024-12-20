@@ -29,6 +29,7 @@ extern volatile const uint8_t MINI_CIFRA_9[];
 void init(void);
 void start_count_cps(void);
 void stop_count_cps(void);
-
+void start_booster(void);
+void stop_booster(void);
 
 #endif /* INIT_H_ */

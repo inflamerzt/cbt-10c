@@ -48,11 +48,11 @@ void init(void){
 		; 10ms is a long time do something before sleep and release reset
 		; code injection under LCD reset
 */
-		TIFR0 = 0;
-		TIMSK0 |= (1<<OCIE0A);
-		OCR0A = 80;
-		TCCR0B |= (5<<CS00);
-		TCNT0 = 0;
+		TIFR2 = 0;
+		TIMSK2 |= (1<<OCIE2A);
+		OCR2A = 80;
+		TCCR2B |= (5<<CS00);
+		TCNT2 = 0;
 		
 
 		
@@ -108,12 +108,13 @@ Do something usefull LCD delay after reset and sleep
 		
 		sleep_cpu();
 		
-		TCCR0B = 0;
-		TIMSK0 = 0;
+		TCCR2B = 0;
+		TIMSK2 = 0;
+		
 		
 		cli();
 //;----------------- remove this string with booster enabled
-		PORTC |= (1<<P_boostFB);
+		//PORTC |= (1<<P_boostFB);
 		
 		
 /*			;==============================================
@@ -177,6 +178,12 @@ Do something usefull LCD delay after reset and sleep
 				LCD_dat LCD_clr
 				
 			*/
+			
+			// init booster
+			OCR0A = 155; //156
+			OCR0B = 155-16;
+			TIMSK0 = (1<<OCIE0A)|(1<<OCIE0B)|(1<<TOIE0);
+			TCCR0A = (1<<WGM01);
 	
 }
 
@@ -191,4 +198,132 @@ void start_count_cps(void){
 void stop_count_cps(void){
 	TCCR1B = 0;
 	TIMSK1 = 0;	
+	};
+	
+	
+void start_booster(void){
+	
+		TCCR0B = (4<<CS00);
+	
+
+
+/*
+TIM1_COMPA: ; Timer1 Compare A Handler
+;nop
+;discharge cap
+;sbi transistor
+;delay
+;cbi transistor
+;check feedback and manipulate frequency
+cbi PORT_booster, P_bCap
+sbi PORT_booster, P_bTrans
+; 0us 1cyc = 0.125us
+push tmpregh ;2
+push tmpreg ;2
+in tmpreg, SREG ;1 - 5us
+push tmpreg ;2 - 7us
+push  XL ;2 - 9us
+push XH ;2 - 11us
+ldi tmpregh, DCboost_period;1 -12us
+lds XH,OCR1AH ;2 - 14us
+lds XL,OCR1AL;2 - 16us
+push tmpreg; 2 - 18us 2,5us with pop
+
+ldi tmpreg, 35; 1
+w20us:
+nop ;1
+dec tmpreg ; 1
+brne w20us ;2/1
+pop tmpreg; 2
+;20us at 8MHz
+;check feedback if suppressor opened
+sbis PINC,P_boostFB
+rjmp freq_up
+;freq_down
+; multiply opened period on 2
+cpi XL,0x00
+cpc XH,tmpregh
+breq end_TIM1COMPA
+clc
+rol XL
+rol XH
+
+rjmp end_TIM1COMPA
+freq_up:
+;divide opened period by 2
+cpi XL,DCboost_period
+cpc XH,zeroreg
+breq end_TIM1COMPA
+clc
+ror XH
+ror XL
+
+;cbi PORT_booster, P_bTrans
+;wait 20 us = 20 cycles cpu
+
+;cbi PORTD, PD1
+end_TIM1COMPA:
+
+sts OCR1AH, XH
+sts OCR1AL, XL
+sbiw XL,8
+sts OCR1BH, XH
+sts OCR1BL, XL
+pop XH ;2
+pop  XL ;2
+pop tmpreg ;2
+out SREG, tmpreg;1
+pop tmpreg ;2
+pop tmpregh ;2
+
+cbi PORT_booster, P_bTrans
+reti
+
+TIM1_COMPB: ; Timer1 Compare B Handler
+;charge capacitor and shift to open IRF840
+;------------------------------------------
+;sbic suppressor pin
+sbic PINC,P_boostFB
+reti
+
+;cbi transistor
+;sbi diod
+;cbi capacitor
+
+cbi PORT_booster, P_bTrans
+sbi PORT_booster, P_bDiode
+cbi PORT_booster, P_bCap
+
+;do anything minimum 6 cpu cycles to charge cap x8 = 48cycles
+
+push tmpreg ;2
+in tmpreg, SREG ;1
+push tmpreg; 2
+; 38 cycles
+ldi tmpreg, 10 ; simplify and charge 6,5us
+w6us:
+nop ;1
+dec tmpreg ; 1
+brne w6us ;2/1
+pop tmpreg; 2
+out SREG,tmpreg ;1
+pop tmpreg ;2
+
+;sbi capacitor
+;cbi diod
+sbi PORT_booster, P_bCap
+cbi PORT_booster, P_bDiode
+
+reti
+*/
+
+
+	};
+	
+	
+	
+void stop_booster(void){
+			TCCR0B = 0;
+	
+	
 	};

@@ -20,8 +20,12 @@ struct {
 Element alarm_el;
 Element count_el;
 
+
+
 volatile uint16_t current_cps_count; //maybe will be not a global var
 volatile uint8_t T1_ovf_count;
+volatile uint8_t booster_delay = 0; //skip periods counter for booster preset
+volatile uint8_t booster_cnt = 0; //current booster counter
 
 
 volatile uint8_t inversion;
@@ -77,6 +81,8 @@ count_el.img = count_pic;
 	init();
 	
 	//LCD_reset();
+	
+	start_booster();
 	
 	LCD_send(LCD_init,tx_cmd);
 	
