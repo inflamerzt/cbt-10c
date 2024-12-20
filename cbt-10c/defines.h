@@ -20,6 +20,8 @@
 #define P_bDiode PD0
 #define P_bCap PD1
 #define P_bTrans PD2
+//#define PORT_bTrans PORTC
+//#define P_bTrans PC6
 #define	P_boostFB PC5
 
 #else

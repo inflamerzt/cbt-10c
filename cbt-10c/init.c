@@ -16,6 +16,7 @@ void init(void){
 		//SMCR = (1<<SE);//|(2<<SM0); //; idle sm=000
 		DDRD = (1<<P_LCD_RES)|(1<<P_bDiode)|(1<<P_bCap)|(1<<P_bTrans)|(1<<PD6);
 		PORTD &= ~(1<<P_LCD_RES);
+		//DDRC =  (1<<P_bTrans);
 		
 		//;=SPI init
 		DDR_SPI = (1<<P_SS)|(1<<P_SCK)|(1<<P_MOSI);
