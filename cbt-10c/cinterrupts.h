@@ -12,7 +12,8 @@ ISR(INT1_vect);
 ISR(PCINT1_vect);
 extern ISR(TIMER0_COMPA_vect);
 extern ISR(TIMER0_COMPB_vect);
-ISR(TIMER2_COMPA_vect);
+extern ISR(TIMER2_COMPA_vect);
+extern ISR(TIMER2_COMPB_vect);
 //ISR(TIMER2_OVF_vect);
 
 

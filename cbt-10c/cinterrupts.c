@@ -41,12 +41,13 @@ ISR(TIMER0_COMPA_vect){
 ISR(TIMER0_OVF_vect){
 	_NOP(); //wake from sleep
 	};
-*/
+
 	
 ISR(TIMER2_COMPA_vect){
 	_NOP(); //wake from sleep
 	};
 
+*/
 
 /*
 ISR(TIMER2_OVF_vect){

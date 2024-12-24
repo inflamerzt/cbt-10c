@@ -33,6 +33,24 @@ nop
 
 reti
 
+.global TIMER2_COMPA_vect
+TIMER2_COMPA_vect:
+nop
+sbi PORTD, PD3
+reti
+
+.global TIMER2_COMPB_vect
+TIMER2_COMPB_vect:
+nop
+cbi PORTD, PD3
+reti
+
+.global TIMER2_OVF_vect
+TIMER2_OVF_vect:
+nop
+reti
+
+
 
 .global TIMER0_COMPA_vect
 TIMER0_COMPA_vect:

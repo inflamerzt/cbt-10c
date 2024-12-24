@@ -26,6 +26,7 @@ volatile uint16_t current_cps_count; //maybe will be not a global var
 volatile uint8_t T1_ovf_count;
 volatile uint8_t booster_delay = 0; //skip periods counter for booster preset
 volatile uint8_t booster_cnt = 0; //current booster counter
+volatile uint8_t systick = 0; //systick interrupt
 
 
 volatile uint8_t inversion;
