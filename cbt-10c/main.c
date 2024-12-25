@@ -20,7 +20,9 @@ struct {
 Element alarm_el;
 Element count_el;
 
-
+volatile uint8_t systick_low = 0; //0..125
+volatile uint8_t systick_high = 0; //0..125
+//512 clock divider *125*125 = 1s at 8MHz
 
 volatile uint16_t current_cps_count; //maybe will be not a global var
 volatile uint8_t T1_ovf_count;
@@ -57,7 +59,17 @@ int main()
 {	
 
 
+	systick_low = 125;
+	
+	do 
+	{
+		systick_low--;
+		systick_high++;
+	} while (systick_low);
+
+
 	//SP = RAMEND;
+	systick_low = systick_high;
 	
 	nor_dis;
 	

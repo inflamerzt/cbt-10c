@@ -11,7 +11,8 @@
 extern volatile const uint8_t* smDig[10];
 
 void init(void){
-
+	
+		//disable unused periph
 		PRR = (1<<PRTWI)|(1<<PRUSART0);
 		//SMCR = (1<<SE);//|(2<<SM0); //; idle sm=000
 		DDRD = (1<<P_LCD_RES)|(1<<P_bDiode)|(1<<P_bCap)|(1<<P_bTrans)|(1<<PD6);
@@ -187,9 +188,9 @@ Do something usefull LCD delay after reset and sleep
 			TCCR0A = (1<<WGM01);
 			
 			//init systick
-			DDRD |= (1<<PD3);
+			//DDRD |= (1<<PD3);
 			OCR2A = 155; //156
-			OCR2B = 50;
+			//OCR2B = 50;
 			TCCR2B =(4<<CS00);
 			TIMSK2 = (1<<OCIE2A)|(1<<OCIE2B);
 			TCCR2A = (2<<WGM20);//(2<<COM0B0)|;
