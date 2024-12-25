@@ -6,7 +6,7 @@
  *  Author: inflamer
  */ 
 
- #include "asm_def.h"
+ #include "defines.h"
  //#include "main.h"
 
 #define DDR_SPI DDRB

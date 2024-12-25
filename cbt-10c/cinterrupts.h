@@ -8,7 +8,7 @@
 #include <avr/interrupt.h>
 
 //ISR(INT0_vect);
-ISR(INT1_vect);
+//ISR(INT1_vect);
 ISR(PCINT1_vect);
 extern ISR(TIMER0_COMPA_vect);
 extern ISR(TIMER0_COMPB_vect);

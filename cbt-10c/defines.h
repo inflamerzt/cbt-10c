@@ -11,6 +11,8 @@
 
 #ifdef __ASSEMBLER__
 
+#include <avr/io.h>
+
 #define tmpreg r16
 #define tmpregh r17
 
@@ -24,8 +26,33 @@
 //#define P_bTrans PC6
 #define	P_boostFB PC5
 
+
+
+
+/* this section must be removed */
+#define sreg_save	r2
+
+#define TXCount r24
+#define TXRowCount r23
+#define TXZCount r18
+#define arg r19
+#define spenreg r21
+#define controlreg r22
+#define inv_dis 0
+
+//#define tmpreg r25
+#define TXXpos r17
+
+#define TXYpos r20
+
+#define zeroreg r1
+/*=================================*/
+
 #else
 
+/* this section must be removed */
+register uint8_t sreg_save asm("r2");
+/*=================================*/
 
 /*
 

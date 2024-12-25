@@ -64,7 +64,7 @@ int main()
 	volatile uint16_t testvar16;
 
 
-
+/* possible unusable part */
 alarm_el.X = 50;
 alarm_el.Y = 1;
 alarm_el.img = alarm_pic;
@@ -72,12 +72,7 @@ alarm_el.img = alarm_pic;
 count_el.X = 50;
 count_el.Y = 1;
 count_el.img = count_pic;
-
-
-
-
-	//testvar = GetCPS();
-	
+//=============================
 
 	init();
 	
@@ -116,20 +111,8 @@ count_el.img = count_pic;
 	
 	dnumber_display(99);
 	
-	//LCD_xy(0,5);
-		
-	//dnumber_display(88);
-	
 
-	/*testvar16 = 0xFFFF;
-
-	LCD_xy(0,2);
-	BCD_conversion24(testvar16);
-	number_display(5);
-*/
-	
-
-	EIMSK |= (1<<INT1);
+	//EIMSK |= (1<<INT1);
 	start_count_cps();
 	
 	volatile uint16_t int_cps_buffer;

@@ -6,52 +6,19 @@
  */ 
 
 #include "cinterrupts.h"
-#include "avr/cpufunc.h"
+//#include "avr/cpufunc.h"
 
 extern uint8_t T1_ovf_count;
 
-/* moved to interrupts.S
-ISR(INT0_vect)
-{
-	//PORTB = 42;
-};
-*/
 
 
+//ISR(INT1_vect){};
 
-ISR(INT1_vect){
-	
-		
-};
-
-ISR(PCINT1_vect){
-
-};
+ISR(PCINT1_vect){};
 
 ISR(TIMER1_OVF_vect){T1_ovf_count++;};
 	
 	
 	
-/*	
-ISR(TIMER0_COMPA_vect){
-	_NOP();
-	};
 
-
-ISR(TIMER0_OVF_vect){
-	_NOP(); //wake from sleep
-	};
-
-	
-ISR(TIMER2_COMPA_vect){
-	_NOP(); //wake from sleep
-	};
-
-*/
-
-/*
-ISR(TIMER2_OVF_vect){
-	_NOP();
-	};
-	*/
 	

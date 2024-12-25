@@ -79,7 +79,6 @@ void LCD_goto_xy(uint8_t X,uint8_t Y){
 	SPI_tx((X&0x0F));
 	//;=== high 3 bits
 	SPI_tx(((X>>4)&0x0F)|0x10);
-	//SPI_tx((X>>4)|0x10);
 	
 	//;=== set Y
 	SPI_tx(((Y&0x07)|0xB0));
@@ -99,9 +98,7 @@ void LCD_clr(void){
 		} while (x);
 		x = 96; y--;
 	} while (y);
-	
-	
-	};
+};
 	
 	
 void LCD_sp(uint8_t i){
@@ -113,7 +110,7 @@ void LCD_sp(uint8_t i){
 	} while (i);
 	
 	
-	};
+};
 	
 void LCD_rclr(uint8_t xs,uint8_t ys){
 		uint8_t yst = LCD_pos_Y;
@@ -138,6 +135,6 @@ void LCD_rclr(uint8_t xs,uint8_t ys){
 void LCD_element(Element data){
 	LCD_xy(data.X,data.Y);
 	LCD_send(data.img,tx_data);
-	};
+};
 	
 

@@ -236,7 +236,6 @@ void stop_count_cps(void){
 void start_booster(void){
 	
 		TCCR0B = (4<<CS00);
-	
 	};
 	
 	
@@ -244,6 +243,4 @@ void start_booster(void){
 void stop_booster(void){
 			TCCR0B = 0;
 			TCNT0 = 0;
-	
-	
 	};
