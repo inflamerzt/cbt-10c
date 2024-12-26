@@ -123,16 +123,11 @@ count_el.img = count_pic;
 		BCD_conversion24(GetCPS());
 		number_display(8);
 
-do {
+do { //infinite loop
 
 	
 	
-	//_delay_ms(1000);
-	if (!second_count){
-		//every 8ms
-
-		sleep_cpu();
-	}
+	if (!second_count){	sleep_cpu();}
 	else{
 		// every second
 		second_count--;
