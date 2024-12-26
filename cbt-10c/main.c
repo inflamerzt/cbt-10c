@@ -20,15 +20,15 @@ struct {
 Element alarm_el;
 Element count_el;
 
-volatile uint8_t systick_low = 0; //0..125
-volatile uint8_t systick_high = 0; //0..125
-//512 clock divider *125*125 = 1s at 8MHz
+volatile uint8_t systick; //0..125
+//256 clock divider *250*125 = 1s at 8MHz
+volatile uint8_t second_count = 0; //systick interrupt
 
 volatile uint16_t current_cps_count; //maybe will be not a global var
 volatile uint8_t T1_ovf_count;
 volatile uint8_t booster_delay = 0; //skip periods counter for booster preset
 volatile uint8_t booster_cnt = 0; //current booster counter
-volatile uint8_t systick = 0; //systick interrupt
+
 
 
 volatile uint8_t inversion;
@@ -59,21 +59,12 @@ int main()
 {	
 
 
-	systick_low = 125;
-	
-	do 
-	{
-		systick_low--;
-		systick_high++;
-	} while (systick_low);
-
 
 	//SP = RAMEND;
-	systick_low = systick_high;
+
 	
 	nor_dis;
 	
-	volatile uint16_t testvar16;
 
 
 /* possible unusable part */
@@ -88,7 +79,7 @@ count_el.img = count_pic;
 
 	init();
 	
-	//LCD_reset();
+	systick = 125;
 	
 	start_booster();
 	
@@ -118,7 +109,6 @@ count_el.img = count_pic;
 	
 	
 
-	uint8_t index;
 	LCD_xy(0,4);
 	
 	dnumber_display(99);
@@ -127,16 +117,34 @@ count_el.img = count_pic;
 	//EIMSK |= (1<<INT1);
 	start_count_cps();
 	
-	volatile uint16_t int_cps_buffer;
+
+		LCD_xy(0,0);
+		
+		BCD_conversion24(GetCPS());
+		number_display(8);
 
 do {
-	LCD_xy(0,0);
-	
-	BCD_conversion24(GetCPS());
-	number_display(8);
+
 	
 	
-	_delay_ms(1000);
+	//_delay_ms(1000);
+	if (!second_count){
+		//every 8ms
+
+		sleep_cpu();
+	}
+	else{
+		// every second
+		second_count--;
+		
+		LCD_xy(0,0);
+			
+		BCD_conversion24(GetCPS());
+		number_display(8);
+		
+		
+		
+	}
 }
 	while(1);
 	//return 0;

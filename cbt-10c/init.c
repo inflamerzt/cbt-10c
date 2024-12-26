@@ -189,9 +189,9 @@ Do something usefull LCD delay after reset and sleep
 			
 			//init systick
 			//DDRD |= (1<<PD3);
-			OCR2A = 155; //156
-			//OCR2B = 50;
-			TCCR2B =(4<<CS00);
+			OCR2A = 250-1; //156
+			OCR2B = 100;
+			TCCR2B =(6<<CS00);
 			TIMSK2 = (1<<OCIE2A)|(1<<OCIE2B);
 			TCCR2A = (2<<WGM20);//(2<<COM0B0)|;
 			

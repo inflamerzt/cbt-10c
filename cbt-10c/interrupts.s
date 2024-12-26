@@ -25,30 +25,25 @@ nop
 reti
 
 .global TIMER2_COMPA_vect
+//every 8ms (25 times = 0.2s)
 TIMER2_COMPA_vect:
 push tmpreg
 in tmpreg, SREG ;1
 push tmpreg; 2
-push tmpregh
 
 nop
-sbi PORTD, PD3
+//sbi PORTD, PD3
 ;working with systick vars
-lds tmpreg, systick_low
-lds tmpregh, systick_high
+lds tmpreg, systick
 dec tmpreg
 brne T2_COMPA_end
+lds tmpreg, second_count
+inc tmpreg
+sts second_count,tmpreg
 ldi tmpreg, 125
-tst tmpregh
-brne T2_COMPA_he
-
-T2_COMPA_he:
-dec tmpregh
 
 T2_COMPA_end:
-sts tmpreg, systick_low
-sts tmpreg, systick_high
-pop tmpregh
+sts systick,tmpreg
 pop tmpreg; 2
 out SREG,tmpreg ;1
 pop tmpreg
@@ -57,7 +52,7 @@ reti
 .global TIMER2_COMPB_vect
 TIMER2_COMPB_vect:
 nop
-cbi PORTD, PD3
+//cbi PORTD, PD3
 reti
 
 .global TIMER2_OVF_vect
