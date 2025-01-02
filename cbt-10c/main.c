@@ -20,9 +20,9 @@ struct {
 Element alarm_el;
 Element count_el;
 
-volatile uint8_t systick; //0..125
+volatile uint8_t systick; //0..125 every 8ms tick
 //256 clock divider *250*125 = 1s at 8MHz
-volatile uint8_t second_count = 0; //systick interrupt
+volatile uint8_t second_count = 0; //systick interrupt every second count
 
 volatile uint16_t current_cps_count; //maybe will be not a global var
 volatile uint8_t T1_ovf_count;
@@ -58,7 +58,7 @@ typedef enum {
 int main()
 {	
 
-
+	sreg_save = SREG;
 
 	//SP = RAMEND;
 
