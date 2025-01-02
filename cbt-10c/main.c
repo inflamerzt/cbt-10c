@@ -103,11 +103,7 @@ count_el.img = count_pic;
 	LCD_element(count_el);
 */	
 
-	
-	//LCD_xy(50,1);
-	//LCD_send(alarm_el.img,tx_data);
-	
-	
+
 
 	LCD_xy(0,4);
 	
@@ -125,8 +121,6 @@ count_el.img = count_pic;
 
 do { //infinite loop
 
-	
-	
 	if (!second_count){	sleep_cpu();}
 	else{
 		// every second
@@ -136,8 +130,6 @@ do { //infinite loop
 			
 		BCD_conversion24(GetCPS());
 		number_display(8);
-		
-		
 		
 	}
 }
