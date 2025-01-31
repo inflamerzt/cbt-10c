@@ -23,6 +23,8 @@
 
 #include "data.h"
 
+#include "graphics.h"
+
 
 volatile const uint8_t * smDig[10];
 uint8_t BCD[8];
