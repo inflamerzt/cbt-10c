@@ -15,6 +15,12 @@
 .extern systick_low
 .extern systick_high
 
+.extern click
+.extern alarm
+.extern cpstmp
+.extern volume
+.extern volpulsecnt
+.extern mute
 
 .section .text                  ; Defines a code section
 
@@ -37,13 +43,100 @@ nop
 lds tmpreg, systick
 dec tmpreg
 brne T2_COMPA_end
+lds tmpreg, systickh
+inc tmpreg
+cpi tmpreg, 0x0F
+brlo T2_nosec
+
 lds tmpreg, second_count
 inc tmpreg
 sts second_count,tmpreg
+
+clr tmpreg
+T2_nosec:
+sts systickh, tmpreg
+
 ldi tmpreg, 125
 
 T2_COMPA_end:
 sts systick,tmpreg
+
+lds tmpreg, mute
+cpi tmpreg, 0
+brne alarmend
+
+lds tmpreg, alarm
+cpi tmpreg, 0
+breq noalarm
+;set port alarm
+push tmpregh
+lds tmpregh, volume
+lds tmpreg, volpulsecnt
+inc tmpregh
+inc tmpreg
+cpi tmpreg, 15
+brlo volpulseok
+clr tmpreg
+volpulseok:
+sts volpulsecnt, tmpreg
+cp tmpreg, tmpregh
+brlo setal
+resetal:
+cbi PORT_buzz, P_buzz
+rjmp popvolreg
+setal:
+sbi PORT_buzz, P_buzz
+
+popvolreg:
+pop tmpregh
+
+
+rjmp alarmend
+noalarm:
+;reset port beep
+cbi PORT_buzz, P_buzz
+
+lds tmpreg, click
+cpi tmpreg, 0
+breq noclick
+
+// maybe need to push registers
+push tmpreg
+push tmpregh
+push r18
+push r19
+// click or not?
+lds tmpreg,TCNT1L
+lds tmpregh,TCNT1H
+lds r18,cpstmp
+lds r19,cpstmp+1
+
+cp tmpreg, r18
+cpc tmpregh, r19
+breq nclick
+
+sbi PORT_buzz, P_buzz
+sts cpstmp, tmpreg
+sts cpstmp+1, tmpregh
+rjmp clickpop
+nclick:
+cbi PORT_buzz, P_buzz
+clickpop:
+pop r19
+pop r18
+pop tmpregh
+pop tmpreg
+
+rjmp alarmend
+noclick:
+cbi PORT_buzz, P_buzz
+
+alarmend:
+
+
+
+
+
 pop tmpreg; 2
 out SREG,tmpreg ;1
 pop tmpreg

@@ -37,6 +37,8 @@ extern void BCD_conversion24(uint32_t number);
 extern void BCD_conversion16(uint16_t number);
 extern uint16_t BCD_conversion8(uint8_t number);
 
+extern uint32_t div24_8(uint32_t digit,uint8_t divider); 
+
 
 PROGMEM volatile const uint8_t LCD_init[] = {
 5,0, LC_nallon_dis,LC_pwron,LC_fillall_dis,LC_nor_dis, LC_nrev_dis, 

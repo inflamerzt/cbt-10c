@@ -26,7 +26,8 @@
 //#define P_bTrans PC6
 #define	P_boostFB PC5
 
-
+#define PORT_buzz PORTB
+#define P_buzz PB0
 
 
 /* this section must be removed */
@@ -155,6 +156,9 @@ register uint8_t sreg_save asm("r2");
 #define P_LCD_RES PD7
 
 #define P_boostFB PC5
+
+#define DDR_buzz DDRB
+#define P_buzz PB0
 
 //#define TXCount r16;(TXCount)
 

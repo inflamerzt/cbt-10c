@@ -19,6 +19,8 @@ void init(void){
 		PORTD &= ~(1<<P_LCD_RES);
 		//DDRC =  (1<<P_bTrans);
 		
+
+		
 		//;=SPI init
 		DDR_SPI = (1<<P_SS)|(1<<P_SCK)|(1<<P_MOSI);
 		DDR_SPI &= ~(1<<P_MISO);
@@ -26,6 +28,8 @@ void init(void){
 		Vmeas_DDR |= (1<<P_Vmeas);
 
 		Vmeas_port |= P_Vmeas;
+		
+		DDR_buzz |= (1<<P_buzz);
 		
 		set_sleep_mode(SLEEP_MODE_IDLE);
 		//set_sleep_mode(SLEEP_MODE_PWR_DOWN);
@@ -191,7 +195,7 @@ Do something usefull LCD delay after reset and sleep
 			//DDRD |= (1<<PD3);
 			OCR2A = 250-1; //156
 			OCR2B = 100;
-			TCCR2B =(6<<CS00);
+			TCCR2B =(3<<CS00);
 			TIMSK2 = (1<<OCIE2A)|(1<<OCIE2B);
 			TCCR2A = (2<<WGM20);//(2<<COM0B0)|;
 			

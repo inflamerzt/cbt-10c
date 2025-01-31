@@ -165,3 +165,59 @@ ret
  sbc r23,r19
  inc r16
  rjmp test2b
+
+
+ .global div24_8
+
+ div24_8:
+
+; Initialize registers (example values)
+//ldi R22, 0x34      ; Lower byte of 24-bit dividend
+//ldi R23, 0x12      ; Middle byte of 24-bit dividend
+//ldi R24, 0x56      ; Upper byte of 24-bit dividend
+//ldi R20, 0x78      ; 8-bit divisor
+
+
+//ldi R26, 0x34      ; Lower byte of 24-bit dividend
+//ldi R27, 0x12      ; Middle byte of 24-bit dividend
+//ldi R28, 0x56      ; Upper byte of 24-bit dividend
+
+//returned in r25 what
+push r28
+push r29
+
+ldi r29,24
+
+clr r25
+clr r26
+clr r27
+clr r28
+begin_d24_8:
+clc
+rol r22
+rol r23
+rol r24
+rol r25
+
+rol r26
+rol r27
+rol r28
+
+
+cp r25, r20
+brlo low_d24_8
+sub r25, r20
+inc r26
+low_d24_8:
+
+dec r29
+brne begin_d24_8
+;end_d24_8:
+
+mov r22, r26
+mov r23, r27
+mov r24, r28
+
+pop r29
+pop r28
+ret
