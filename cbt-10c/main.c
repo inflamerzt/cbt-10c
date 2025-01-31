@@ -9,6 +9,8 @@
 #include "main.h"
 #include "avr\common.h"
 
+#include "math.h"
+
 struct {
 	uint8_t a;
 	uint8_t b;
@@ -20,7 +22,9 @@ struct {
 Element alarm_el;
 Element count_el;
 
-volatile uint8_t systick; //0..125 every 8ms tick
+
+volatile uint8_t systick; //0..125
+volatile uint8_t systickh;
 //256 clock divider *250*125 = 1s at 8MHz
 volatile uint8_t second_count = 0; //systick interrupt every second count
 
@@ -33,7 +37,28 @@ volatile uint8_t booster_cnt = 0; //current booster counter
 
 volatile uint8_t inversion;
 
+volatile uint8_t alarm;
+volatile uint8_t click;
+volatile uint16_t cpstmp;
+volatile uint8_t volume;
+volatile uint8_t volpulsecnt;
+volatile uint8_t mute;
+
 //#include "interrupts.s"
+
+/*
+get middle value of cps array
+variables:
+summ of elements
+array of elements
+array pointer
+
+new summ = summ + current element(array[pointer-1]) - next element (array[pointer]) 
+
+middle value = summ / elements
+
+
+*/
 
 
 uint32_t GetCPS(void);
@@ -58,7 +83,35 @@ typedef enum {
 int main()
 {	
 
-	sreg_save = SREG;
+volatile uint32_t test32;
+volatile uint8_t test8;
+volatile float result32;
+
+alarm = 0;
+volume = 3;
+click = 0;
+volpulsecnt = 0;
+mute = 0;
+
+
+	
+
+	test32 = 0xFFFFFFFF;
+	test8 = 0x0f;
+	result32 = test32/test8;
+	_NOP();
+		test32 = 11100111;
+		test8 = 110;
+		result32 = (float)test32/(float)test8; //float aa aa aa 4e, uint32_t 55 55 55 00
+	_NOP();
+	
+	test32 = (uint32_t)result32;
+	
+	result32 -= test32;
+	
+	test32 = (uint32_t)(result32*1000);
+	
+		_NOP();
 
 	//SP = RAMEND;
 
@@ -130,6 +183,9 @@ do { //infinite loop
 			
 		BCD_conversion24(GetCPS());
 		number_display(8);
+		
+
+		// = 1;
 		
 	}
 }
