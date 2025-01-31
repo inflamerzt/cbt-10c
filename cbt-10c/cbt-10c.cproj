@@ -151,6 +151,12 @@
     <Compile Include="functions.S">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="graphics.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="graphics.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="init.c">
       <SubType>compile</SubType>
     </Compile>

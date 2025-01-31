@@ -26,7 +26,7 @@ volatile uint8_t systick; //0..125
 volatile uint8_t systickh;
 
 //256 clock divider *250*125 = 1s at 8MHz
-volatile uint8_t second_count = 0; //systick interrupt
+volatile uint8_t second_count = 0; //systick interrupt every second count
 
 volatile uint16_t current_cps_count; //maybe will be not a global var
 volatile uint8_t T1_ovf_count;
@@ -114,6 +114,9 @@ mute = 0;
 		_NOP();
 
 
+	sreg_save = SREG;
+
+
 	//SP = RAMEND;
 
 	
@@ -157,11 +160,7 @@ count_el.img = count_pic;
 	LCD_element(count_el);
 */	
 
-	
-	//LCD_xy(50,1);
-	//LCD_send(alarm_el.img,tx_data);
-	
-	
+
 
 	LCD_xy(0,4);
 	
@@ -179,8 +178,6 @@ count_el.img = count_pic;
 
 do { //infinite loop
 
-	
-	
 	if (!second_count){	sleep_cpu();}
 	else{
 		// every second
@@ -190,8 +187,6 @@ do { //infinite loop
 			
 		BCD_conversion24(GetCPS());
 		number_display(8);
-		
-		// = 1;
 		
 	}
 }

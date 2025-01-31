@@ -12,8 +12,9 @@
       
 //.extern my_value
       
-.extern systick_low
-.extern systick_high
+//.extern systick_low
+//.extern systick_high
+
 
 .extern click
 .extern alarm
@@ -34,8 +35,10 @@ reti
 //every 8ms (25 times = 0.2s)
 TIMER2_COMPA_vect:
 push tmpreg
-in tmpreg, SREG ;1
-push tmpreg; 2
+in tmpreg, SREG
+push tmpreg
+
+in sreg_save, SREG
 
 nop
 //sbi PORTD, PD3
@@ -59,6 +62,9 @@ sts systickh, tmpreg
 ldi tmpreg, 125
 
 T2_COMPA_end:
+
+out SREG, sreg_save
+
 sts systick,tmpreg
 
 lds tmpreg, mute

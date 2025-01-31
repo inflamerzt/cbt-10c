@@ -9,9 +9,11 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
+#include <avr/io.h>
+
 #ifdef __ASSEMBLER__
 
-#include <avr/io.h>
+
 
 #define tmpreg r16
 #define tmpregh r17
