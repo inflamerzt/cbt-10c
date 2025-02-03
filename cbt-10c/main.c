@@ -22,15 +22,10 @@ struct {
 Element alarm_el;
 Element count_el;
 
-<<<<<<< HEAD
-volatile uint8_t systick; //0..125
-volatile uint8_t systickh;
-
-=======
 
 volatile uint8_t systick; //0..125
 volatile uint8_t systickh;
->>>>>>> eab83d64a38ac98cb647445e67c1d27e1e6f68a2
+
 //256 clock divider *250*125 = 1s at 8MHz
 volatile uint8_t second_count = 0; //systick interrupt every second count
 
@@ -119,13 +114,9 @@ mute = 0;
 	
 		_NOP();
 
-<<<<<<< HEAD
 
 	sreg_save = SREG;
 
-
-=======
->>>>>>> eab83d64a38ac98cb647445e67c1d27e1e6f68a2
 	//SP = RAMEND;
 
 	
@@ -197,12 +188,8 @@ do { //infinite loop
 		BCD_conversion24(GetCPS());
 		number_display(8);
 		
-<<<<<<< HEAD
-=======
-
 		// = 1;
 		
->>>>>>> eab83d64a38ac98cb647445e67c1d27e1e6f68a2
 	}
 }
 	while(1);
