@@ -14,6 +14,8 @@
 #define P_MOSI PB3
 #define P_MISO PB4
 #define P_SCK PB5
+.equ n1b, 10000000
+.equ n100m, 10000000
 .equ n10m, 10000000
 .equ n1m, 1000000
 .equ n100k, 100000
@@ -73,6 +75,17 @@ ret
  st -X,r16
 
  rjmp BCD_conversion16s
+ 
+ 
+ ;.global BCD_conversion32 
+ ;BCD_conversion32:
+ ;r19-r24 (r24 b0, r25 b1, r22 b2, r23 b3 ...r18 b6 ,r19 b7)
+ ;r25 r24 r23 r22 - 32bit value
+
+ // test n1b
+ // test n100m
+
+
 
 .global BCD_conversion24 
  BCD_conversion24:
@@ -140,6 +153,22 @@ ret
 
  pop r16
  ret
+
+
+ test4b:
+ cp r21,r17
+ cp r22,r18
+ cpc r23,r19
+ cpc r24,r20
+ brsh conttest4b
+ ret
+ conttest4b:
+ sub r21,r17
+ sbc r22,r18
+ sbc r23,r19
+ sbc r24,r20
+ inc r16
+ rjmp test4b
 
 
  test3b:

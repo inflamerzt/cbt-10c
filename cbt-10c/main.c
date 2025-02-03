@@ -45,6 +45,15 @@ volatile uint8_t volume;
 volatile uint8_t volpulsecnt;
 volatile uint8_t mute;
 
+
+
+volatile uint32_t cps_array[10];
+volatile uint8_t cps_ptr;
+volatile uint8_t cps_size;
+volatile uint32_t cps_acc;
+volatile uint32_t cps_mid_acc;
+volatile uint8_t cps_cnt;
+
 //#include "interrupts.s"
 
 /*
@@ -61,6 +70,8 @@ middle value = summ / elements
 
 */
 
+
+void BCD_display32( unsigned long num );
 
 uint32_t GetCPS(void);
 inline void number_display(uint8_t size);
@@ -94,7 +105,10 @@ click = 0;
 volpulsecnt = 0;
 mute = 0;
 
-
+cps_acc = 0;
+cps_ptr = 0;
+cps_size = 10;
+cps_cnt = 0;
 	
 
 	test32 = 0xFFFFFFFF;
@@ -166,6 +180,9 @@ count_el.img = count_pic;
 	
 	dnumber_display(99);
 	
+	//LCD_xy(0,3);
+	//BCD_display32(0xFFFFFFFF);
+	
 
 	//EIMSK |= (1<<INT1);
 	start_count_cps();
@@ -184,9 +201,28 @@ do { //infinite loop
 		second_count--;
 		
 		LCD_xy(0,0);
+		volatile uint32_t cps_value =  GetCPS();
+		cps_acc += cps_value;
+		//cps_acc += 2500000;
 			
-		BCD_conversion24(GetCPS());
+		BCD_conversion24(cps_value);
 		number_display(8);
+		
+		LCD_xy(0,1);
+		
+		cps_array[cps_ptr] = cps_value;
+		cps_ptr++;
+		if (cps_ptr == cps_size) {cps_ptr = 0;};
+		if (cps_cnt < cps_size -1) {cps_cnt++;};
+		cps_mid_acc += cps_value - cps_array[cps_ptr];
+				
+		BCD_display32(cps_acc);
+		
+		LCD_xy(0,2);
+		
+		BCD_conversion24(cps_mid_acc/cps_cnt);
+		number_display(8);
+		
 		
 		// = 1;
 		
@@ -226,3 +262,23 @@ inline void dnumber_display(uint8_t number){
 		LCD_send(smDig[bcdnumber&0xFF],tx_data);
 	};
 	
+	
+void BCD_display32( unsigned long num )
+{
+	uint8_t datarray[10];
+	
+	unsigned long temp ;
+	signed char index ;
+	
+	for ( index=9; num>0; index-- ) {
+		temp = num / 10 ;
+		datarray[index] = num-10*temp ;
+		num = temp ;
+	}
+	for ( ; index>=0; index-- )
+	datarray[index] = 0 ;
+	
+	for (index =0;index < 10;index++){
+		LCD_send(smDig[datarray[index]],tx_data);
+	}
+}
