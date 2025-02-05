@@ -27,6 +27,8 @@
 
 
 volatile const uint8_t * smDig[10];
+volatile const uint8_t * bigDig[10];
+
 uint8_t BCD[8];
 uint8_t test;
 

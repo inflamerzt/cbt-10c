@@ -26,6 +26,18 @@ extern volatile const uint8_t MINI_CIFRA_7[];
 extern volatile const uint8_t MINI_CIFRA_8[];
 extern volatile const uint8_t MINI_CIFRA_9[];
 
+
+extern volatile const uint8_t CIFRA_0[];
+extern volatile const uint8_t CIFRA_1[];
+extern volatile const uint8_t CIFRA_2[];
+extern volatile const uint8_t CIFRA_3[];
+extern volatile const uint8_t CIFRA_4[];
+extern volatile const uint8_t CIFRA_5[];
+extern volatile const uint8_t CIFRA_6[];
+extern volatile const uint8_t CIFRA_7[];
+extern volatile const uint8_t CIFRA_8[];
+extern volatile const uint8_t CIFRA_9[];
+
 void init(void);
 void start_count_cps(void);
 void stop_count_cps(void);

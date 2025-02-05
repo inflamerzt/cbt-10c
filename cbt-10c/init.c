@@ -9,6 +9,7 @@
 
 
 extern volatile const uint8_t* smDig[10];
+extern volatile const uint8_t* bigDig[10];
 
 void init(void){
 	
@@ -76,6 +77,17 @@ Do something usefull when LCD reset pulled low and sleep
 	smDig[7] = MINI_CIFRA_7;
 	smDig[8] = MINI_CIFRA_8;
 	smDig[9] = MINI_CIFRA_9;
+	
+		bigDig[0] = CIFRA_0;
+		bigDig[1] = CIFRA_1;
+		bigDig[2] = CIFRA_2;
+		bigDig[3] = CIFRA_3;
+		bigDig[4] = CIFRA_4;
+		bigDig[5] = CIFRA_5;
+		bigDig[6] = CIFRA_6;
+		bigDig[7] = CIFRA_7;
+		bigDig[8] = CIFRA_8;
+		bigDig[9] = CIFRA_9;
 
 
 
