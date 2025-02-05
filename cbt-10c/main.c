@@ -47,7 +47,7 @@ volatile uint8_t mute;
 
 
 
-volatile uint32_t cps_array[100];
+volatile uint32_t cps_array[121]; //maximum cps_size = 120
 volatile uint8_t cps_ptr;
 volatile uint8_t cps_size;
 volatile uint32_t cps_acc;
